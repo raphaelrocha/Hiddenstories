@@ -1,14 +1,11 @@
 package com.ufam.hiddenstories.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceActivity;
+import com.ufam.hiddenstories.PlaceListActivity;
 import com.ufam.hiddenstories.R;
 import com.ufam.hiddenstories.adapters.CategoryListAdapter;
 import com.ufam.hiddenstories.adapters.PlaceListAdapter;
@@ -39,38 +37,36 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+public class CategoryListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener, CustomVolleyCallbackInterface {
 
-
-public class PlaceListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener, CustomVolleyCallbackInterface {
-    protected static final String TAG = "LOG";
     protected RecyclerView mRecyclerView;
-    protected List<Place> mList;
-    protected android.support.design.widget.FloatingActionButton fab;
-    protected VolleyConnection mVolleyConnection;
+    private List<Category> mList;
+    private VolleyConnection mVolleyConnection;
 
-    private Category mCategory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         mVolleyConnection = new VolleyConnection(this);
 
         callServer();
-
     }
 
-    protected void callServer(){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.SERVER_ADDR,"list_places_by_cats",mCategory.getId(),null);
+    private void callServer (){
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.SERVER_ADDR, "list_cats", null, null);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_place, container, false);
+        // Inflate the layout for this fragment
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
+
+        final View view = inflater.inflate(R.layout.fragment_category_list, container, false);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list_category);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
@@ -80,62 +76,50 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         //llm.setReverseLayout(true);
         mRecyclerView.setLayoutManager(llm);
 
+
         return view;
     }
 
-    public void setList(ArrayList<Place> c){
+
+
+    public void setList(ArrayList<Category> c){
         mList = c;
-        PlaceListAdapter adapter = new PlaceListAdapter(getActivity(), mList);
+        CategoryListAdapter adapter = new CategoryListAdapter(getActivity(), mList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter(adapter);
     }
 
 
     public void setCardView(JSONArray ja,String status){
-        ArrayList<Place> places = new ArrayList<Place>();
+        ArrayList<Category> categories = new ArrayList<Category>();
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
-                Place place = new Place();
-                place = ((BaseActivity)getActivity()).popListPlaces(ja.getJSONObject(i));
-                places.add(place);
+                Category category = new Category();
+                category = ((BaseActivity)getActivity()).popListCategory(ja.getJSONObject(i));
+                categories.add(category);
             }
         }catch (JSONException e){}
 
-        setList(places);
+        setList(categories);
     }
 
-    public void setCategory(Category c){
-        this.mCategory = c;
-    }
+
 
     @Override
     public void onClickListener(View view, int position) {
 
-        Intent intent = new Intent(getActivity(), PlaceActivity.class);
-        intent.putExtra("place", mList.get(position));
+        Intent intent = new Intent(getActivity(), PlaceListActivity.class);
+        intent.putExtra("category", mList.get(position));
         getActivity().startActivity(intent);
 
 
     }
-    @Override
-    public void onLongPressClickListener(View view, int position) {
-        Toast.makeText(getActivity(), "onLongPressClickListener(): " + position, Toast.LENGTH_SHORT).show();
 
-    }
 
     @Override
     public void deliveryResponse(JSONArray response, String flag) {
-        Log.i("PLACELISTA_FRAG", response.toString());
-
-        try {
-            String id = response.getJSONObject(0).getString("id");
-            if(!id.equals("not_found")){
-                setCardView(response,null);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        Log.i("CATEGORY_LIST_FRAG", "SUCESS: "+response.toString());
+        setCardView(response,null);
     }
 
     @Override
@@ -145,13 +129,18 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void deliveryError(VolleyError error, String flag) {
-
+        Log.i("CATEGORY_LIST_FRAG", "ERROR: "+error );
     }
 
     @Override
-    public void onStop(){
-        super.onStop();
-        mVolleyConnection.canceRequest();
+    public void onClick(View v) {
+
+    }
+
+
+    @Override
+    public void onLongPressClickListener(View view, int position) {
+
     }
 
 
@@ -160,20 +149,20 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         private GestureDetector mGestureDetector;
         private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
 
-        public RecyclerViewTouchListener(Context c, final RecyclerView rv, RecyclerViewOnClickListenerHack rvoclh){
+        public RecyclerViewTouchListener(Context c, final RecyclerView rv, RecyclerViewOnClickListenerHack rvoclh) {
             mContext = c;
             mRecyclerViewOnClickListenerHack = rvoclh;
 
-            mGestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener(){
+            mGestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public void onLongPress(MotionEvent e) {
                     super.onLongPress(e);
 
                     View cv = rv.findChildViewUnder(e.getX(), e.getY());
 
-                    if(cv != null && mRecyclerViewOnClickListenerHack != null){
+                    if (cv != null && mRecyclerViewOnClickListenerHack != null) {
                         mRecyclerViewOnClickListenerHack.onLongPressClickListener(cv,
-                                rv.getChildPosition(cv) );
+                                rv.getChildPosition(cv));
                     }
                 }
 
@@ -181,42 +170,35 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
                 public boolean onSingleTapUp(MotionEvent e) {
                     View cv = rv.findChildViewUnder(e.getX(), e.getY());
 
-                    if(cv != null && mRecyclerViewOnClickListenerHack != null){
+                    if (cv != null && mRecyclerViewOnClickListenerHack != null) {
                         mRecyclerViewOnClickListenerHack.onClickListener(cv,
-                                rv.getChildPosition(cv) );
+                                rv.getChildPosition(cv));
                     }
 
-                    return(true);
+                    return (true);
                 }
             });
         }
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            mGestureDetector.onTouchEvent(e);
             return false;
         }
 
         @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
 
         @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean b) {}
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
     }
 
-
     @Override
-    public void onClick(View v) {
-        String aux = "";
-
-
-        Toast.makeText(getActivity(), aux, Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putParcelableArrayList("mList", (ArrayList<Car>) mList);
+    public void onStop(){
+        super.onStop();
+        mVolleyConnection.canceRequest();
     }
 }

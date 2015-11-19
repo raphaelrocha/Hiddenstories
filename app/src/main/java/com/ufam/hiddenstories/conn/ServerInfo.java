@@ -12,6 +12,8 @@ public class ServerInfo {
     public static final String separator = ";~;";
     //public static final String dnsNameServer = "http://10.0.3.2"; //endereço local para desenvolvimento
     public static final String dnsNameServer = "http://ec2-54-233-85-160.sa-east-1.compute.amazonaws.com"; //servidor aws
+    public static final String SERVER_ADDR = "http://10.0.3.2/historyapp/server.php"; //servidor aws
+
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";

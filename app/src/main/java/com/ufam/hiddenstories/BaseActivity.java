@@ -9,9 +9,13 @@ import android.view.View;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ufam.hiddenstories.conn.ServerInfo;
+import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
+import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Place;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,36 +26,48 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        VolleyConnectionQueue.getINSTANCE().startQueue(this);
+
     }
 
-    public List<Place> popListPlaces(JSONArray ja){
-        List<Place> listAux = new ArrayList<>();
+    public Category popListCategory(JSONObject jo){
+        Category category = new Category();
 
-        Place place1 = new Place();
-        place1.setId("1");
-        place1.setName("Teatro Amazonas");
-        place1.setDescription(getResources().getString(R.string.tmp_place_description));
-        place1.setAddr("Largo São Sebastião / CENTRO");
-        place1.setDistrict("Centro");
-        place1.setCity("Manaus");
-        place1.setCountry("Brasil");
-        place1.setPicturePlace(ServerInfo.imageFolder+"teatro_amazonas.jpg");
-        place1.setLocation("123;456");
-        listAux.add(place1);
+        try {
+            category.setId(jo.getString("id"));
+            category.setName(jo.getString("name"));
+            category.setPicture(ServerInfo.imageFolder+jo.getString("picture"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        Place place2 = new Place();
-        place2.setId("2");
-        place2.setName("Alfândega");
-        place2.setDescription(getResources().getString(R.string.tmp_alfandega));
-        place2.setAddr("Getílio Vargas");
-        place2.setDistrict("Centro");
-        place2.setCity("Manaus");
-        place2.setCountry("Brasil");
-        place2.setPicturePlace(ServerInfo.imageFolder+"alfandega.jpg");
-        place2.setLocation("123;456");
-        listAux.add(place2);
-
-        return(listAux);
+        return(category);
     }
 
+    public Place popListPlaces(JSONObject jo){
+        Place place = new Place();
+
+        try {
+            place.setId(jo.getString("id"));
+            place.setIdCategory(jo.getString("id_category"));
+            place.setIdDistrict(jo.getString("id_district"));
+            place.setIdCity(jo.getString("id_city"));
+            place.setIdState(jo.getString("id_state"));
+            place.setIdCountry(jo.getString("id_country"));
+            place.setName(jo.getString("name"));
+            place.setDescription(jo.getString("description"));
+            place.setAddr(jo.getString("addr"));
+            place.setPicturePlace(ServerInfo.imageFolder+jo.getString("picture_place"));
+            place.setLocation(jo.getString("location"));
+            place.setCategory(jo.getString("name_category"));
+            place.setDistrict(jo.getString("name_district"));
+            place.setCity(jo.getString("name_city"));
+            place.setState(jo.getString("name_state"));
+            place.setCountry(jo.getString("name_country"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return(place);
+    }
 }

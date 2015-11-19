@@ -47,7 +47,7 @@ public class PlaceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("APP","SDK: "+Build.VERSION.SDK_INT);
         // TRANSITIONS
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
+        /*if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
             Log.i("APP","Entrou na TRANSITIONS");
                 /*Explode trans1 = new Explode();
                 trans1.setDuration(3000);
@@ -55,7 +55,7 @@ public class PlaceActivity extends BaseActivity {
                 trans2.setDuration(3000);
 
                 getWindow().setEnterTransition( trans1 );
-                getWindow().setReturnTransition( trans2 );*/
+                getWindow().setReturnTransition( trans2 );*
 
             TransitionInflater inflater = TransitionInflater.from( this );
             Transition transition = inflater.inflateTransition( R.transition.transitions );
@@ -91,7 +91,7 @@ public class PlaceActivity extends BaseActivity {
                     Log.i("APP", "onTransitionResume()");
                 }
             });
-        }
+        }*/
 
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);

@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                openPlace();
+                openCategory();
             }
         });
 
@@ -51,6 +51,29 @@ public class MainActivity extends BaseActivity {
                     //Pair.create(ivCar, "element1"),
                     //Pair.create( tvModel, "element2" ),
                     //Pair.create( tvBrand, "element3" ));
+
+            this.startActivity( intent, options.toBundle() );
+        }
+        else{
+            this.startActivity(intent);
+        }
+    }
+
+    public void openCategory(){
+        Intent intent = new Intent(this, CategoryListActivity.class);
+        //intent.putExtra("car", mList.get(position));
+
+        // TRANSITIONS
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
+
+            //View ivPlace = view.findViewById(R.id.);
+            //View tvModel = view.findViewById(R.id.tv_model);
+            //View tvBrand = view.findViewById(R.id.tv_brand);
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+            //Pair.create(ivCar, "element1"),
+            //Pair.create( tvModel, "element2" ),
+            //Pair.create( tvBrand, "element3" ));
 
             this.startActivity( intent, options.toBundle() );
         }

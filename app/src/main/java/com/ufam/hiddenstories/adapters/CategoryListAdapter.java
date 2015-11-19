@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.ufam.hiddenstories.R;
 import com.ufam.hiddenstories.interfaces.RecyclerViewOnClickListenerHack;
+import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.tools.DataUrl;
 
@@ -32,16 +32,16 @@ import java.util.Random;
 /**
  * Created by viniciusthiengo on 4/5/15.
  */
-public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyViewHolder> {
+public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Place> mList;
+    private List<Category> mList;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
     private float scale;
     private int width, height, roundPixels;
 
 
-    public PlaceListAdapter(Context c, List<Place> l){
+    public CategoryListAdapter(Context c, List<Category> l){
         mContext = c;
         mList = l;
         mLayoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,7 +59,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v;
 
-        v = mLayoutInflater.inflate(R.layout.place_item_list, viewGroup, false);
+        v = mLayoutInflater.inflate(R.layout.category_item_list, viewGroup, false);
 
         MyViewHolder mvh = new MyViewHolder(v);
         return mvh;
@@ -70,10 +70,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int position) {
 
-        Log.i("TESTE",""+mList.get(position).getName());
-        Log.i("TESTE","onBindViewHolder()");
-
-        ControllerListener listener = new BaseControllerListener(){
+        /*ControllerListener listener = new BaseControllerListener(){
             @Override
             public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
                 super.onFinalImageSet(id, imageInfo, animatable);
@@ -127,7 +124,6 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             }
         }
 
-        Log.i("URL",mList.get(position).getPicturePlace());
         Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getPicturePlace(), w));
         DraweeController dc = Fresco.newDraweeControllerBuilder()
                 .setUri( uri )
@@ -139,7 +135,9 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         myViewHolder.ivPlace.getHierarchy().setRoundingParams(rp);
 
         myViewHolder.tvPlaceCity.setText(mList.get(position).getCity() + "/" + mList.get(position).getDistrict());
-        myViewHolder.tvPlaceName.setText(mList.get(position).getName());
+        myViewHolder.tvPlaceName.setText(mList.get(position).getName());*/
+
+        myViewHolder.tvCategoryName.setText(mList.get(position).getName());
 
     }
 
@@ -154,8 +152,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
     }
 
 
-    public void addListItem(Place p, int position){
-        mList.add(p);
+    public void addListItem(Category cat, int position){
+        mList.add(cat);
         notifyItemInserted(position);
     }
 
@@ -167,16 +165,12 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public SimpleDraweeView ivPlace;
-        public TextView tvPlaceName;
-        public TextView tvPlaceCity;
+        public TextView tvCategoryName;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            ivPlace = (SimpleDraweeView) itemView.findViewById(R.id.iv_place);
-            tvPlaceName = (TextView) itemView.findViewById(R.id.tv_place_name);
-            tvPlaceCity = (TextView) itemView.findViewById(R.id.tv_place_city);
+            tvCategoryName = (TextView) itemView.findViewById(R.id.tv_category_name);
 
             itemView.setOnClickListener(this);
         }

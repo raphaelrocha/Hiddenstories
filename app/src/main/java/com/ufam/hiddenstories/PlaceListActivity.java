@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ufam.hiddenstories.fragments.PlaceListFragment;
+import com.ufam.hiddenstories.models.Category;
 
 public class PlaceListActivity extends BaseActivity {
 
@@ -22,6 +23,7 @@ public class PlaceListActivity extends BaseActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_place_list);
 
+        Category category = getIntent().getParcelableExtra("category");
 
         mToolbar = (Toolbar) findViewById(R.id.tb_place_list);
         mToolbar.setTitle("Locais");//texto temporário com o nome do local
@@ -43,10 +45,13 @@ public class PlaceListActivity extends BaseActivity {
         mFrag = (PlaceListFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");
         if(mFrag == null) {
             mFrag = new PlaceListFragment();
+            mFrag.setCategory(category);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.place_list_frag_container_AComentaryList, mFrag, "mainFrag");
             ft.commit();
         }
+
+
     }
 
 }

@@ -16,4 +16,8 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
     <string name="title_activity_map">MapActivity</string>
 
     <string name="tmp_alfandega">O conjunto arquitetônico da Alfândega e Guardamoria foi arrom bado pelo Patrimônio Histórico Internacional, em 1987, junto com o Complexo Portuário. Inaugurados oficialmente em 1906, os dois prédios foram construídos pela firma inglesa Manaos Harbour Limited, como parte do contrato de concessão do Porto de Manaus. Em estilo eclético, com elementos medievalistas e renascentistas, trata-se do primeiro prédio pré-fabricado do mundo. O prédio da Guardamoria, com sua torre e farol edificados com o mesmo material e estilo da Alfândega completa o complexo. O edifício da Alfândega foi construído em blocos de tijolos aparentes, pré-montados e importados da Inglaterra, uma reprodução dos prédios londrinos do início do sécsu XXX.</string>
+    <string name="title_activity_category_list">CategoryListActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
