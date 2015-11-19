@@ -25,19 +25,20 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
+            app:expandedTitleMarginEnd="64dp"
+            >
 
-            <ImageView
+            <!--ImageView
                 android:id="@+id/iv_place"
                 android:src="@drawable/teatro_amazonas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:transitionName="element1"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="parallax"/-->
 
-            <!--com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/iv_car"
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/iv_place"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 fresco:actualImageScaleType="centerCrop"
@@ -45,7 +46,7 @@
                 fresco:failureImage="@drawable/error_img"
                 fresco:retryImage="@drawable/retry_img"
                 android:transitionName="element1"
-                app:layout_collapseMode="parallax"-->
+                app:layout_collapseMode="parallax"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tb_place"
@@ -56,6 +57,8 @@
                 android:titleTextAppearance="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:layout_collapseMode="pin"/>
+
+
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -72,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
+        android:src="@android:drawable/ic_dialog_map"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginEnd="@dimen/fab_margin_right"
         android:layout_marginRight="@dimen/fab_margin_right"

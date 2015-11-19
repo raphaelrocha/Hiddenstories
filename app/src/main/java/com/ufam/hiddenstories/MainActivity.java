@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openPlace(){
-        Intent intent = new Intent(this, PlaceActivity.class);
+        Intent intent = new Intent(this, PlaceListActivity.class);
         //intent.putExtra("car", mList.get(position));
 
         // TRANSITIONS

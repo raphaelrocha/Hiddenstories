@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#FFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorSecond">#999</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorPrimarytext">#212121</color>
+
+    <color name="grey">#ddd</color>
+    <color name="black">#000</color>
+
+    <color name="blue">#ff0000ff</color>
+    <color name="bg_edt_txt">#25000000</color>
+    <color name="transparent">#00B6B6B6</color>
+    <color name="opacity1">#60000000</color>
+    <color name="bg_response">#42ebd801</color>
 </resources>
