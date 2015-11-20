@@ -5,12 +5,14 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.services.CustomJsonArrayRequest;
 import com.ufam.hiddenstories.services.CustomJsonObjectRequest;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -41,19 +43,24 @@ public class VolleyConnection {
         }
     }
 
-    public void callServerApiByJsonArrayRequest(final String url, String method, String data, final String flag){
+
+    public void callServerApiByJsonArrayRequest(final String url, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
-        if(data!=null){
+        /*if(data!=null){
             params.put("data", data);
         }
         if(method!=null){
             params.put("method", method);
-        }
+        }*/
+        Gson gson = new Gson();
+        //
+        // HashMap<String,String> jsonParam = new HashMap<String,String>();
+        params.put("json",gson.toJson(data));
 
         final String activityName = mCustomVolleyCallbackInterface.getClass().getSimpleName();
-        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + data);
-        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + flag);
+        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + params);
+        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + TAG);
 
         CustomJsonArrayRequest request = new CustomJsonArrayRequest(Request.Method.POST,
                 url,
@@ -61,15 +68,15 @@ public class VolleyConnection {
                 new Response.Listener<JSONArray>(){
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i("Script", "FLAG: " + flag + " | SUCCESS: " + response);
-                        mCustomVolleyCallbackInterface.deliveryResponse(response,flag);
+                        Log.i("Script", "TAG: " + TAG + " | SUCCESS: " + response);
+                        mCustomVolleyCallbackInterface.deliveryResponse(response,TAG);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("Script", "FLAG: " + flag + " | ERROR: " + error);
-                        mCustomVolleyCallbackInterface.deliveryError(error,flag);
+                        Log.i("Script", "TAG: " + TAG + " | ERROR: " + error);
+                        mCustomVolleyCallbackInterface.deliveryError(error,TAG);
                     }
                 });
 
@@ -80,19 +87,23 @@ public class VolleyConnection {
     }
 
     //METODO PARA ENVIO E RECEBIMENTO DE JSONOBJECTS
-    public void callServerApiByJsonObjectRequest(final String url, String method, String data, final String flag){
+    public void callServerApiByJsonObjectRequest(final String url, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
-        if(data!=null){
+        /*if(data!=null){
             params.put("data", data);
         }
         if(method!=null){
             params.put("method", method);
-        }
+        }*/
+        Gson gson = new Gson();
+        //
+        // HashMap<String,String> jsonParam = new HashMap<String,String>();
+        params.put("json",gson.toJson(data));
 
         final String activityName = mCustomVolleyCallbackInterface.getClass().getSimpleName();
-        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + data);
-        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + flag);
+        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + params);
+        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + TAG);
 
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,
                 url,
@@ -101,16 +112,16 @@ public class VolleyConnection {
                     @Override
                     public void onResponse(JSONObject response) {
                         //envia a resposta de sucesso para a activity
-                        Log.i("Script", "FLAG: " + flag + " | SUCCESS: " + response);
-                        mCustomVolleyCallbackInterface.deliveryResponse(response, flag);
+                        Log.i("Script", "TAG: " + TAG + " | SUCCESS: " + response);
+                        mCustomVolleyCallbackInterface.deliveryResponse(response, TAG);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //envia a mensagem de erro para a activity
-                        Log.i("Script", "FLAG: " + flag + " | ERROR: " + error);
-                        mCustomVolleyCallbackInterface.deliveryError(error, flag);
+                        Log.i("Script", "TAG: " + TAG + " | ERROR: " + error);
+                        mCustomVolleyCallbackInterface.deliveryError(error, TAG);
                     }
                 });
 

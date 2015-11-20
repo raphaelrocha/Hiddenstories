@@ -55,7 +55,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     }
 
     private void callServer (){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.SERVER_ADDR, "list_cats", null, null);
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, null, null);
     }
 
     @Override
@@ -117,18 +117,18 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
 
 
     @Override
-    public void deliveryResponse(JSONArray response, String flag) {
+    public void deliveryResponse(JSONArray response, String TAG) {
         Log.i("CATEGORY_LIST_FRAG", "SUCESS: "+response.toString());
         setCardView(response,null);
     }
 
     @Override
-    public void deliveryResponse(JSONObject response, String flag) {
+    public void deliveryResponse(JSONObject response, String TAG) {
 
     }
 
     @Override
-    public void deliveryError(VolleyError error, String flag) {
+    public void deliveryError(VolleyError error, String TAG) {
         Log.i("CATEGORY_LIST_FRAG", "ERROR: "+error );
     }
 

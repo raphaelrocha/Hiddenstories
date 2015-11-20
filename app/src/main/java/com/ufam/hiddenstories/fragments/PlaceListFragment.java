@@ -37,8 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 public class PlaceListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener, CustomVolleyCallbackInterface {
@@ -61,7 +62,10 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     protected void callServer(){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.SERVER_ADDR,"list_places_by_cats",mCategory.getId(),null);
+        HashMap<String, String> params = new  HashMap<String, String> ();
+        params.put("id_cat", mCategory.getId());
+
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT,params,null);
     }
 
     @Override
@@ -124,7 +128,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     @Override
-    public void deliveryResponse(JSONArray response, String flag) {
+    public void deliveryResponse(JSONArray response, String TAG) {
         Log.i("PLACELISTA_FRAG", response.toString());
 
         try {
@@ -139,12 +143,12 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     @Override
-    public void deliveryResponse(JSONObject response, String flag) {
+    public void deliveryResponse(JSONObject response, String TAG) {
 
     }
 
     @Override
-    public void deliveryError(VolleyError error, String flag) {
+    public void deliveryError(VolleyError error, String TAG) {
 
     }
 
