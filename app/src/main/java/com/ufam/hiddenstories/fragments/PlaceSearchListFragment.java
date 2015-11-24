@@ -2,13 +2,8 @@ package com.ufam.hiddenstories.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceActivity;
 import com.ufam.hiddenstories.R;
-import com.ufam.hiddenstories.adapters.CategoryListAdapter;
 import com.ufam.hiddenstories.adapters.PlaceListAdapter;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
@@ -39,40 +33,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class PlaceListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener, CustomVolleyCallbackInterface {
+public class PlaceSearchListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener {
     protected static final String TAG = "LOG";
     protected RecyclerView mRecyclerView;
     protected List<Place> mList;
     protected android.support.design.widget.FloatingActionButton fab;
-    protected VolleyConnection mVolleyConnection;
-
     private Category mCategory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mVolleyConnection = new VolleyConnection(this);
+        //mVolleyConnection = new VolleyConnection(this);
 
-        callServer();
+        //callServer();
 
     }
 
-    protected void callServer(){
-        HashMap<String, String> params = new  HashMap<String, String> ();
-        params.put("id_cat", mCategory.getId());
-
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT,params,null);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_place, container, false);
+        final View view = inflater.inflate(R.layout.fragment_search_place, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
         mRecyclerView.setHasFixedSize(true);
@@ -86,6 +71,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
         return view;
     }
+
 
     public void setList(ArrayList<Place> c){
         mList = c;
@@ -119,46 +105,13 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         intent.putExtra("place", mList.get(position));
         getActivity().startActivity(intent);
 
-
     }
     @Override
     public void onLongPressClickListener(View view, int position) {
         Toast.makeText(getActivity(), "onLongPressClickListener(): " + position, Toast.LENGTH_SHORT).show();
-
     }
 
-    @Override
-    public void deliveryResponse(JSONArray response, String TAG) {
-        Log.i("PLACELISTA_FRAG", response.toString());
 
-        try {
-            String id = response.getJSONObject(0).getString("id");
-            if(!id.equals("not_found")){
-                setCardView(response,null);
-            }else{
-                ((BaseActivity)getActivity()).showLongSnack("Nenhum lugar encontrado.");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void deliveryResponse(JSONObject response, String TAG) {
-
-    }
-
-    @Override
-    public void deliveryError(VolleyError error, String TAG) {
-
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        mVolleyConnection.canceRequest();
-    }
 
 
     private static class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListener {

@@ -17,7 +17,7 @@ public class ServerInfo {
 
     public static final String CATEGORY_LIST = SERVER_ADDR + SERVER_FOLDER + "/category"; //servidor aws
     public static final String GET_PLACE_BY_CAT = SERVER_ADDR + SERVER_FOLDER + "/place/getbycat"; //servidor aws
-
+    public static final String FIND_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/find";
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";

@@ -32,7 +32,7 @@ public class MapActivity extends AppCompatActivity {
             }
         }
 
-        mToolbar = (Toolbar) findViewById(R.id.tb_map);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(mPlace.getName());//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);

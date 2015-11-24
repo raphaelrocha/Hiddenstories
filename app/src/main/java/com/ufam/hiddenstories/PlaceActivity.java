@@ -116,7 +116,7 @@ public class PlaceActivity extends BaseActivity {
         //mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //mCollapsingToolbarLayout.setTitle("1Teatro Amazonas");
 
-        mToolbar = (Toolbar) findViewById(R.id.tb_place);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(mPlace.getName());//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
