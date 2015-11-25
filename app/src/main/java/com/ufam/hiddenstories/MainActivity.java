@@ -9,34 +9,99 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
-public class MainActivity extends BaseActivity {
+import com.android.volley.VolleyError;
+import com.ufam.hiddenstories.conn.ServerInfo;
+import com.ufam.hiddenstories.conn.VolleyConnection;
+import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
+import com.ufam.hiddenstories.models.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+public class MainActivity extends BaseActivity implements CustomVolleyCallbackInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        Button btLogin = (Button) findViewById(R.id.btn_login);
+        final EditText edtLoginUser = (EditText) findViewById(R.id.edt_login_user);
+        final EditText edtLoginPasswd = (EditText) findViewById(R.id.edt_login_passwd);
 
-                openCategory();
+        edtLoginUser.setText("p1@h.com");
+        edtLoginPasswd.setText("123");
+
+        btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user = edtLoginUser.getText().toString().trim();
+                String passwd = edtLoginPasswd.getText().toString().trim();
+                login(user,passwd);
             }
         });
 
+        if (getSession().isLoggedIn()) {
+            Log.i("LOGIN_ACTIVITY","Já está logado.");
 
+            showDialog("Aguarde.");
+            Log.i("ID: ", getPrefs().getString("ul-id", null));
+            startApp(getUserFromPrefers());
+        }
     }
 
-    public void openPlace(){
+    private void login(String user, String passwd){
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("user",user);
+        params.put("passwd",passwd);
+        VolleyConnection conn = new VolleyConnection(this);
+        conn.callServerApiByJsonArrayRequest(ServerInfo.LOGIN,params,"LOGIN");
+    }
+
+    private void savePrefers(JSONArray ja){
+        hideKeyboard();
+        JSONObject jo;
+        try {
+            jo = ja.getJSONObject(0);
+            User user = popUser(jo);
+
+            getSession().setLogin(true);
+            getEditorPref().putBoolean("ul", true); // Storing boolean - true/false
+            getEditorPref().putString("ul-id", user.getId()); // Storing string
+            getEditorPref().putString("ul-name", user.getName()); // Storing string
+            getEditorPref().putString("ul-email", user.getEmail()); // Storing string
+            getEditorPref().putString("ul-picture_profile", user.getPictureProfile()); // Storing string
+            getEditorPref().commit();
+
+            startApp(user);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Alert("Algo deu errado. Tente novamente.");
+        }
+    }
+
+    private void startApp(User user){
+        Intent intent = new Intent(this, CategoryListActivity.class);
+        intent.putExtra("user",user);
+        startActivity(intent);
+        finish();
+    }
+
+    /*public void openPlace(){
         Intent intent = new Intent(this, PlaceListActivity.class);
         //intent.putExtra("car", mList.get(position));
 
@@ -80,7 +145,7 @@ public class MainActivity extends BaseActivity {
         else{
             this.startActivity(intent);
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,5 +167,22 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void deliveryResponse(JSONArray response, String TAG) {
+
+        savePrefers(response);
+
+    }
+
+    @Override
+    public void deliveryResponse(JSONObject response, String TAG) {
+
+    }
+
+    @Override
+    public void deliveryError(VolleyError error, String TAG) {
+
     }
 }

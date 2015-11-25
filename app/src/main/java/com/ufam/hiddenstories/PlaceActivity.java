@@ -113,11 +113,15 @@ public class PlaceActivity extends BaseActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-        //mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //mCollapsingToolbarLayout.setTitle("1Teatro Amazonas");
 
+        //mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
+        mCollapsingToolbarLayout.setTitle(mPlace.getName());
+        //mCollapsingToolbarLayout.setExpandedTitleTextAppearance(getResources().getColor(R.color.transparent));
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(mPlace.getName());//texto temporário com o nome do local
+        //mToolbar.setTitle(mPlace.getName());//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,9 @@ import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
 import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.User;
+import com.ufam.hiddenstories.provider.SearchableProvider;
+import com.ufam.hiddenstories.tools.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +38,9 @@ import java.util.List;
 public class BaseActivity extends AppCompatActivity {
 
     protected ProgressDialog dialog;
+    private SessionManager session;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +51,10 @@ public class BaseActivity extends AppCompatActivity {
         dialog.setCancelable(false);
 
         VolleyConnectionQueue.getINSTANCE().startQueue(this);
+        session = new SessionManager(this);
 
+        pref = getApplicationContext().getSharedPreferences("hiddenstories.ufam.com", 0); // 0 - for private mode
+        editor = pref.edit();
     }
 
     protected Context getContext() {
@@ -85,8 +98,25 @@ public class BaseActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return(place);
+    }
+
+    public User popUser(JSONObject jo) throws JSONException {
+        User user = new User();
+        user.setId(jo.getString("id"));
+        user.setEmail(jo.getString("email"));
+        user.setName(jo.getString("name"));
+        user.setPictureProfile(ServerInfo.imageFolder+jo.getString("picture_profile"));
+        return user;
+    }
+
+    public User getUserFromPrefers(){
+        User user = new User();
+        user.setId(getPrefs().getString("ul-id",null));
+        user.setName(getPrefs().getString("ul-name",null));
+        user.setEmail(getPrefs().getString("ul-email",null));
+        user.setPictureProfile(getPrefs().getString("ul-picture_profile",null));
+        return user;
     }
 
     public void showSnack(String msg){
@@ -173,5 +203,48 @@ public class BaseActivity extends AppCompatActivity {
     public void hideDialog() {
         if (dialog.isShowing())
             dialog.dismiss();
+    }
+
+    public SharedPreferences.Editor getEditorPref(){
+        return this.editor;
+    }
+
+    public SharedPreferences getPrefs(){
+        return this.pref;
+    }
+
+    public SessionManager getSession(){
+        return this.session;
+    }
+
+    public void hideKeyboard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    public void logoutUser(){
+        session.setLogin(false);
+        clearSearchHistory();
+        // Clearing all data from Shared Preferences
+        editor.clear();
+        editor.commit();
+
+
+        //LoginManager.getInstance().logOut();
+        //AppController.getINSTANCE().setFacebookLogin(false);
+
+        Intent intent  = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+
+    }
+
+    protected void clearSearchHistory(){
+        SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
+                SearchableProvider.AUTHORITY,
+                SearchableProvider.MODE);
+
+        searchRecentSuggestions.clearHistory();
+
     }
 }

@@ -9,6 +9,38 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <TextView android:text="Clica no botão com o envelope." android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/edt_login_user"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_user_hint"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/edt_login_user"
+        android:id="@+id/edt_login_passwd"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_passwd_hint"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/edt_login_passwd"
+        android:id="@+id/btn_login"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_btn_hint"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        />
+
 </RelativeLayout>

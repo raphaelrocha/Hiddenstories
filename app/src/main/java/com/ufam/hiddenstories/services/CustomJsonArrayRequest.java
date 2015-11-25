@@ -59,9 +59,11 @@ public class CustomJsonArrayRequest extends Request<JSONArray> {
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			Log.i("jsonArrayResponse",response.toString());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
+			Log.i("jsonArrayResponse",response.toString());
 			/*if(e.getMessage().contains("{\"id\":\"not_found\"}")){
 
 				HashMap<String,String> jsErr = new HashMap<String,String>();

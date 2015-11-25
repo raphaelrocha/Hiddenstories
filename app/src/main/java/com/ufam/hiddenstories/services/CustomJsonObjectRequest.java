@@ -60,9 +60,11 @@ public class CustomJsonObjectRequest extends Request<JSONObject> {
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			Log.i("jsonObjectResponse",response.toString());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
+			Log.i("jsonObjectResponse",response.toString());
 		}
 		return null;
 	}
