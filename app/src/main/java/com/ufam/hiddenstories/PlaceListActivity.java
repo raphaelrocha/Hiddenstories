@@ -57,7 +57,10 @@ public class PlaceListActivity extends BaseActivity {
         mFrag = (PlaceListFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");
         if(mFrag == null) {
             mFrag = new PlaceListFragment();
-            mFrag.setCategory(category);
+            //mFrag.setCategory(category);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("category",category);
+            mFrag.setArguments(bundle);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.place_list_frag_container_AComentaryList, mFrag, "mainFrag");
             ft.commit();

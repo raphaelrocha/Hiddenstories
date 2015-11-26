@@ -55,13 +55,19 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i("PLACELISTFRAG","onCreate()");
+
         mVolleyConnection = new VolleyConnection(this);
 
-        callServer();
+        ((BaseActivity)getActivity()).forceStartVolleyQueue();
 
+        mCategory = getArguments().getParcelable("category");
+
+        callServer();
     }
 
     protected void callServer(){
+        Log.i("PLACELISTFRAG","callServer()"+ mCategory.getId());
         HashMap<String, String> params = new  HashMap<String, String> ();
         params.put("id_cat", mCategory.getId());
 
@@ -74,6 +80,8 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_place, container, false);
 
+        Log.i("PLACELISTFRAG","onCreateView()");
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
         mRecyclerView.setHasFixedSize(true);
 
@@ -84,10 +92,13 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         //llm.setReverseLayout(true);
         mRecyclerView.setLayoutManager(llm);
 
+
+
         return view;
     }
 
     public void setList(ArrayList<Place> c){
+        Log.i("PLACELISTFRAG","setList()");
         mList = c;
         PlaceListAdapter adapter = new PlaceListAdapter(getActivity(), mList);
         adapter.setRecyclerViewOnClickListenerHack(this);
@@ -96,6 +107,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
 
     public void setCardView(JSONArray ja,String status){
+        Log.i("PLACELISTFRAG","setCardView()");
         ArrayList<Place> places = new ArrayList<Place>();
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
@@ -108,12 +120,13 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         setList(places);
     }
 
-    public void setCategory(Category c){
-        this.mCategory = c;
-    }
+    //public void setCategory(Category c){
+    //    this.mCategory = c;
+    //}
 
     @Override
     public void onClickListener(View view, int position) {
+        Log.i("PLACELISTFRAG","onClickListener()");
 
         Intent intent = new Intent(getActivity(), PlaceActivity.class);
         intent.putExtra("place", mList.get(position));
@@ -123,12 +136,14 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
     @Override
     public void onLongPressClickListener(View view, int position) {
+        Log.i("PLACELISTFRAG","onLongPressClickListener()");
         Toast.makeText(getActivity(), "onLongPressClickListener(): " + position, Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void deliveryResponse(JSONArray response, String TAG) {
+        Log.i("PLACELISTFRAG","deliveryResponse(Array)");
         Log.i("PLACELISTA_FRAG", response.toString());
 
         try {
@@ -146,17 +161,19 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void deliveryResponse(JSONObject response, String TAG) {
+        Log.i("PLACELISTFRAG","deliveryResponse(Object)");
 
     }
 
     @Override
     public void deliveryError(VolleyError error, String TAG) {
-
+        Log.i("PLACELISTFRAG","deliveryError()");
     }
 
     @Override
     public void onStop(){
         super.onStop();
+        Log.i("PLACELISTFRAG","onStop()");
         mVolleyConnection.canceRequest();
     }
 
@@ -213,6 +230,8 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClick(View v) {
+
+        Log.i("PLACELISTFRAG","onClick()");
         String aux = "";
 
 
@@ -220,9 +239,17 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
 
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.i("PLACELISTFRAG","onSaveInstanceState()");
         super.onSaveInstanceState(outState);
         //outState.putParcelableArrayList("mList", (ArrayList<Car>) mList);
-    }
+    }*/
+
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        Log.i("PLACELISTFRAG","onResume()");
+        mCategory = getArguments().getParcelable("category");
+    }*/
 }

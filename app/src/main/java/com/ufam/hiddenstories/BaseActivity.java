@@ -61,6 +61,11 @@ public class BaseActivity extends AppCompatActivity {
         return this;
     }
 
+    public void forceStartVolleyQueue(){
+        VolleyConnectionQueue.getINSTANCE().startQueue(this);
+    }
+
+
     public Category popListCategory(JSONObject jo){
         Category category = new Category();
 
@@ -247,4 +252,10 @@ public class BaseActivity extends AppCompatActivity {
         searchRecentSuggestions.clearHistory();
 
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
 }

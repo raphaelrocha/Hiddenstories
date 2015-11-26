@@ -117,7 +117,9 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
         mVolleyConnection = new VolleyConnection(this);
 
-        if(savedInstanceState != null){
+        mPlace = getIntent().getExtras().getParcelable("place");
+
+        /*if(savedInstanceState != null){
             mPlace = savedInstanceState.getParcelable("place");
         }
         else {
@@ -127,7 +129,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
                 Toast.makeText(this, "Fail!", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        }
+        }*/
 
         btFavorite = (ImageButton) findViewById(R.id.bt_favorite);
         btMap = (TextView) findViewById(R.id.button_location);
@@ -341,5 +343,17 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     @Override
     public void deliveryError(VolleyError error, String TAG) {
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPlace = getIntent().getExtras().getParcelable("place");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPlace = getIntent().getExtras().getParcelable("place");
     }
 }

@@ -48,6 +48,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((BaseActivity)getActivity()).forceStartVolleyQueue();
 
         mVolleyConnection = new VolleyConnection(this);
 
@@ -200,5 +201,11 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     public void onStop(){
         super.onStop();
         mVolleyConnection.canceRequest();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        callServer();
     }
 }
