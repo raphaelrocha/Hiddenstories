@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/white"
     tools:context="com.ufam.hiddenstories.PlaceActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -23,7 +24,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_height="300dp"
             android:layout_width="match_parent"
-            app:expandedTitleTextAppearance="@color/transparent"
+            app:expandedTitleTextAppearance="@style/TransparentText"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginStart="48dp"
@@ -73,7 +74,7 @@
         android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_email" /-->
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
+    <!--android.support.design.widget.FloatingActionButton android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
@@ -82,6 +83,6 @@
         android:layout_marginEnd="@dimen/fab_margin_right"
         android:layout_marginRight="@dimen/fab_margin_right"
         app:layout_anchor="@id/place_bar"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"/-->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -43,6 +43,7 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
     private String queryToShowInSearchView;
     private VolleyConnection mVolleyConnection;
     private String query;
+    private int mCONTA_SNACK_ALERT; //garante q seja exibido apenas um snackalert no erro.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,8 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
         setContentView(R.layout.activity_searchable);
 
         mVolleyConnection = new VolleyConnection(this);
+
+        mCONTA_SNACK_ALERT=0;
         /*mToolbar = (Toolbar) findViewById(R.id.toolbar_layout);
         mToolbar.setTitle("Buscar");//texto temporário com o nome do local
         //setSupportActionBar(mToolbar);
@@ -197,7 +200,11 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
             if(!id.equals("not_found")){
                 mFrag.setCardView(response,null);
             }else{
-                ((BaseActivity)this).showLongSnack("Nenhum lugar encontrado.");
+                if(mCONTA_SNACK_ALERT==0){
+                    mCONTA_SNACK_ALERT++;
+                    Log.i("SNAK", "---- Lançou o snak ----");
+                    ((BaseActivity)this).showLongSnack("Nenhum resultado encontrado.");
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -227,5 +234,6 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
         super.onResume();
         Log.i("SearchableActivity","onResume()");
         hendleSearch(getIntent());
+        mCONTA_SNACK_ALERT=0;
     }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:id="@+id/button_comment"
+        android:gravity="center"
+        android:text="@string/option_commentary"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:id="@+id/button_album"
+        android:text="@string/option_album"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="9dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/button_comment"
+        android:layout_toEndOf="@+id/button_comment"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:text="@string/option_map"
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:id="@+id/button_location"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="9dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/button_album"
+        android:layout_toEndOf="@+id/button_album"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:id="@+id/button_rat"
+        android:text="@string/option_rat"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="11dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/button_location"
+        android:layout_toEndOf="@+id/button_location"
+        android:textSize="12sp"/>
+
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/bt_favorite"
+        android:scaleType="fitCenter"
+        android:background="@color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

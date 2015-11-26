@@ -20,19 +20,34 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.ufam.hiddenstories.conn.ServerInfo;
+import com.ufam.hiddenstories.conn.VolleyConnection;
+import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.tools.DataUrl;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class PlaceActivity extends BaseActivity {
+import java.util.HashMap;
+
+import bolts.Bolts;
+
+
+public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackInterface{
 
     private TextView tvDescription;
     private ViewGroup mRoot;
@@ -42,6 +57,9 @@ public class PlaceActivity extends BaseActivity {
     private SimpleDraweeView ivPlace;
     private float scale;
     private int width, height, roundPixels;
+    private VolleyConnection mVolleyConnection;
+    private ImageButton btFavorite;
+    private TextView btMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +115,8 @@ public class PlaceActivity extends BaseActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_place);
 
+        mVolleyConnection = new VolleyConnection(this);
+
         if(savedInstanceState != null){
             mPlace = savedInstanceState.getParcelable("place");
         }
@@ -108,6 +128,9 @@ public class PlaceActivity extends BaseActivity {
                 finish();
             }
         }
+
+        btFavorite = (ImageButton) findViewById(R.id.bt_favorite);
+        btMap = (TextView) findViewById(R.id.button_location);
 
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -194,7 +217,7 @@ public class PlaceActivity extends BaseActivity {
         tvDescription.setText(mPlace.getDescription());
         //tvDescription.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || savedInstanceState != null ? View.VISIBLE : View.INVISIBLE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +226,81 @@ public class PlaceActivity extends BaseActivity {
                 showMap();
 
             }
+        });*/
+
+
+        //setIconOptions();
+
+        checkFavorite(mPlace);
+    }
+
+    private void changeFavIcon(boolean b){
+        if(b){
+            btFavorite.setImageResource(R.drawable.favorite_on);
+            btFavorite.setTag(R.drawable.favorite_on);
+        }else{
+            btFavorite.setImageResource(R.drawable.favorite_off);
+            btFavorite.setTag(R.drawable.favorite_off);
+        }
+
+        setIconOptions();
+    }
+
+    public void setIconOptions(){
+
+        //changeFavIcon(false);
+
+        btFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            int resource = (int) btFavorite.getTag();
+                if (resource == R.drawable.favorite_off) {
+                    Log.i("PROFESSIONAL_PROFILE", "clicou favorito: favOff para favOn");
+                    btFavorite.setImageResource(R.drawable.favorite_on);
+                    btFavorite.setTag(R.drawable.favorite_on);
+                    setFavorite(mPlace);
+                } else if (resource == R.drawable.favorite_on) {
+                    Log.i("PROFESSIONAL_PROFILE", "clicou favorito: favOn para favOff");
+                    btFavorite.setImageResource(R.drawable.favorite_off);
+                    btFavorite.setTag(R.drawable.favorite_off);
+                    unSetFavorite(mPlace);
+                }
+            }
         });
+
+        btMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMap();
+            }
+        });
+    }
+
+    public void checkFavorite(Place p){
+        User userLogged = getUserFromPrefers();
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("id_user", userLogged.getId());
+        params.put("id_place",p.getId());
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.CHECK_FAVORITE, params, "chk-fav");
+        Log.i("APP", "Verificou favorito: " + params.toString());
+    }
+
+    public void setFavorite(Place p){
+        User userLogged = getUserFromPrefers();
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("id_user", userLogged.getId());
+        params.put("id_place",p.getId());
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_FAVORITE, params, "set-fav");
+        Log.i("APP", "Marcou favorito: " + params.toString());
+    }
+
+    public void unSetFavorite(Place p){
+        User userLogged = getUserFromPrefers();
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("id_user", userLogged.getId());
+        params.put("id_place",p.getId());
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UNSET_FAVORITE, params, "unset-fav");
+        Log.i("APP", "Desmarcou favorito: " + params.toString());
     }
 
     private void showMap(){
@@ -222,4 +319,27 @@ public class PlaceActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void deliveryResponse(JSONArray response, String TAG) {
+
+    }
+
+    @Override
+    public void deliveryResponse(JSONObject response, String TAG) {
+
+        try {
+            String id = response.getString("id");
+            if(TAG.equals("chk-fav")){
+                changeFavIcon(Boolean.parseBoolean(id));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("RESPONSE",response.toString());
+    }
+
+    @Override
+    public void deliveryError(VolleyError error, String TAG) {
+
+    }
 }

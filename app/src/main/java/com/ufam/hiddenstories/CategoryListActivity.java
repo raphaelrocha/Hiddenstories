@@ -55,7 +55,7 @@ import com.ufam.hiddenstories.fragments.PlaceListFragment;
 import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.tools.DataUrl;
 
-public class CategoryListActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CategoryListActivity extends BaseActivity {
 
     private CategoryListFragment mFrag;
     private SearchView searchView;
@@ -108,9 +108,6 @@ public class CategoryListActivity extends BaseActivity implements NavigationView
         });
 
         setDrawerUser(savedInstanceState,toolbar);
-
-
-
 
     }
 
@@ -284,22 +281,4 @@ public class CategoryListActivity extends BaseActivity implements NavigationView
         hideDialog();
     }
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.drawer_logout) {
-            logoutUser();
-        } else if (id == R.id.drawer_clear_history) {
-            clearSearchHistory();
-            Alert("Suas buscas recentes foram apagadas");
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }

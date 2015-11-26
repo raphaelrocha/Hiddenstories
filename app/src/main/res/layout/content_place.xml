@@ -2,10 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
+    android:padding="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_place" tools:context="com.ufam.hiddenstories.PlaceActivity">
 
@@ -13,10 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:paddingTop="0dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -24,7 +18,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <include layout="@layout/options_place"
+                android:id="@+id/options"/>
+
             <TextView
+                android:layout_below="@id/options"
                 android:id="@+id/place_tv_name"
                 android:paddingTop="20dp"
                 android:textSize="20sp"
@@ -53,26 +51,8 @@
                     android:textColor="@color/colorPrimarytext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                    />
             </LinearLayout>
-
-            <Button
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/place_ll_tv_description"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/bt_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@android:color/transparent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="Telefone"
-                android:textColor="#1d80f0"
-                android:textSize="16sp" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
