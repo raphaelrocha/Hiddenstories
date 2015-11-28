@@ -22,6 +22,9 @@ public class ServerInfo {
     public static final String SET_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/mark";
     public static final String UNSET_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/unmark";
     public static final String  CHECK_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/check";
+    public static final String  SET_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/set";
+    public static final String  UPDATE_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/update";
+    public static final String  GET_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/get";
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";

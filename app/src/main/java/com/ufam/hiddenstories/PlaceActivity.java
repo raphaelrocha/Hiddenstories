@@ -1,6 +1,7 @@
 package com.ufam.hiddenstories;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -21,8 +23,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +39,7 @@ import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.Rating;
 import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.tools.DataUrl;
 
@@ -59,7 +64,8 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     private int width, height, roundPixels;
     private VolleyConnection mVolleyConnection;
     private ImageButton btFavorite;
-    private TextView btMap;
+    private TextView btMap, btRat;
+    private Rating rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +139,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
         btFavorite = (ImageButton) findViewById(R.id.bt_favorite);
         btMap = (TextView) findViewById(R.id.button_location);
+        btRat = (TextView) findViewById(R.id.button_rat);
 
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -233,6 +240,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
         //setIconOptions();
 
+        getRating();
         checkFavorite(mPlace);
     }
 
@@ -276,7 +284,23 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
                 showMap();
             }
         });
+        btRat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rat_btn();
+            }
+        });
     }
+
+    public void getRating(){
+        User userLogged = getUserFromPrefers();
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("id_user", userLogged.getId());
+        params.put("id_place",mPlace.getId());
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_RATING, params, "get-rat");
+        Log.i("APP", "Pegoou rating: " + params.toString());
+    }
+
 
     public void checkFavorite(Place p){
         User userLogged = getUserFromPrefers();
@@ -317,9 +341,93 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
             TransitionManager.beginDelayedTransition(mRoot, new Slide());
             tvDescription.setVisibility( View.INVISIBLE );
         }
-
         super.onBackPressed();
     }
+
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPlace = getIntent().getExtras().getParcelable("place");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPlace = getIntent().getExtras().getParcelable("place");
+    }
+
+    public void rat_btn(){
+        final Dialog rankDialog;
+        final RatingBar ratingBar;
+        Log.i("PROFESSIONAL_PROFILE","rat_bnt()");
+        String TAG = "set-rat";
+        rankDialog = new Dialog(this, R.style.FullHeightDialog);
+        rankDialog.setContentView(R.layout.dialog_rating);
+        rankDialog.setCancelable(true);
+        ratingBar = (RatingBar) rankDialog.findViewById(R.id.dialog_ratingbar);
+        ratingBar.setRating(0);
+
+        TextView text = (TextView) rankDialog.findViewById(R.id.rank_dialog_text1);
+        text.setText(mPlace.getName());
+
+        final EditText comments = (EditText) rankDialog.findViewById(R.id.edt_comment_rat);
+        comments.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+        if(rating==null){
+            rating = new Rating();
+        }
+        if(rating.getValue()!=null){
+            ratingBar.setRating(Float.parseFloat(rating.getValue()));
+            TAG = "update-rat";
+            if(rating.getText()!=null){
+                comments.setText(rating.getText());
+            }
+        }else{
+            rating = new Rating();
+        }
+
+        final String SEND_TAG = TAG;
+        Button updateButton = (Button) rankDialog.findViewById(R.id.rank_dialog_button);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ratingBar.getRating();
+                Log.i("RANK DIALOG","CLICK");
+                User user = getUserFromPrefers();
+                rating.setIdUser(user.getId());
+                rating.setIdPlace(mPlace.getId());
+                rating.setValue(Integer.toString(Math.round(ratingBar.getRating())));
+                rating.setText(comments.getText().toString().trim());
+                //EditText comments = (EditText) rankDialog.findViewById(R.id.edt_comment_rat);
+                setRating(rating,SEND_TAG);
+                rankDialog.dismiss();
+            }
+        });
+        //now that the dialog is set up, it's time to show it
+        rankDialog.show();
+    }
+
+    public void setRating(Rating rating,String TAG){
+
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("id_user",rating.getIdUser());
+        params.put("id_place",rating.getIdPlace());
+        params.put("value",rating.getValue());
+        params.put("text",rating.getText());
+
+        if(TAG.equals("set-rat")){
+            Log.i("PROFESSIONAL_PROFILE","set commentary: "+params.toString());
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, params,TAG);
+
+        }else if(TAG.equals("update-rat")){
+            Log.i("PROFESSIONAL_PROFILE", "update commentary: " + params.toString());
+            //Log.i("PROFESSIONAL_PROFILE","update commentary: "+getPrefs().getString("ul-id", null) + ";~;" + getProfessional().getIdProfessional()+";~;"+Math.round(value)+";~;"+comments);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, params, TAG);
+        }
+    }
+
 
     @Override
     public void deliveryResponse(JSONArray response, String TAG) {
@@ -334,6 +442,22 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
             if(TAG.equals("chk-fav")){
                 changeFavIcon(Boolean.parseBoolean(id));
             }
+            if(TAG.equals("set-rat")){
+                //changeFavIcon(Boolean.parseBoolean(id));
+            }
+            if(TAG.equals("update-rat")){
+                //changeFavIcon(Boolean.parseBoolean(id));
+            }
+            if(TAG.equals("get-rat")){
+                if(rating==null){
+                    rating = new Rating();
+                }
+                rating.setId(response.getString("id"));
+                rating.setIdUser(response.getString("id_user"));
+                rating.setIdPlace(response.getString("id_place"));
+                rating.setValue(response.getString("rating_value"));
+                rating.setText(response.getString("rating_text"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -343,17 +467,5 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     @Override
     public void deliveryError(VolleyError error, String TAG) {
 
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        mPlace = getIntent().getExtras().getParcelable("place");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPlace = getIntent().getExtras().getParcelable("place");
     }
 }
