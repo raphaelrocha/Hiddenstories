@@ -64,7 +64,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     private int width, height, roundPixels;
     private VolleyConnection mVolleyConnection;
     private ImageButton btFavorite;
-    private TextView btMap, btRat;
+    private TextView btMap, btRat, btAlbum, btComments;
     private Rating rating;
 
     @Override
@@ -140,6 +140,8 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         btFavorite = (ImageButton) findViewById(R.id.bt_favorite);
         btMap = (TextView) findViewById(R.id.button_location);
         btRat = (TextView) findViewById(R.id.button_rat);
+        btAlbum = (TextView) findViewById(R.id.button_album);
+        btComments = (TextView) findViewById(R.id.button_comment);
 
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -256,6 +258,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         setIconOptions();
     }
 
+
     public void setIconOptions(){
 
         //changeFavIcon(false);
@@ -290,6 +293,29 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
                 rat_btn();
             }
         });
+        btAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                album_btn();
+            }
+        });
+        btComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                comment_btn();
+            }
+        });
+
+    }
+
+    private void album_btn(){
+        showLongSnack("Aqui vai abrir a tela de fotos.");
+    }
+
+    private void comment_btn(){
+        Intent intent = new Intent(this, RatingListActivity.class);
+        intent.putExtra("place",mPlace);
+        startActivity(intent);
     }
 
     public void getRating(){
@@ -300,7 +326,6 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_RATING, params, "get-rat");
         Log.i("APP", "Pegoou rating: " + params.toString());
     }
-
 
     public void checkFavorite(Place p){
         User userLogged = getUserFromPrefers();
@@ -436,17 +461,22 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
     @Override
     public void deliveryResponse(JSONObject response, String TAG) {
-
         try {
             String id = response.getString("id");
             if(TAG.equals("chk-fav")){
                 changeFavIcon(Boolean.parseBoolean(id));
             }
-            if(TAG.equals("set-rat")){
-                //changeFavIcon(Boolean.parseBoolean(id));
+            else if(TAG.equals("set-rat")){
+                showLongSnack("Você avaliou este local. Obrigado.");
             }
-            if(TAG.equals("update-rat")){
-                //changeFavIcon(Boolean.parseBoolean(id));
+            else if(TAG.equals("update-rat")){
+                showLongSnack("Você avaliou este local. Obrigado.");
+            }
+            else if(TAG.equals("set-fav")){
+                showLongSnack(mPlace.getName()+" foi adicionado a sua lista de locais favoritos.");
+            }
+            else if(TAG.equals("unset-fav")){
+                showLongSnack(mPlace.getName()+" foi removido da sua lista de locais favoritos.");
             }
             if(TAG.equals("get-rat")){
                 if(rating==null){

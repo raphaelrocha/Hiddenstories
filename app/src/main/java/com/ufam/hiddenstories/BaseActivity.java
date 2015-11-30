@@ -24,6 +24,7 @@ import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
 import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.Rating;
 import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.provider.SearchableProvider;
 import com.ufam.hiddenstories.tools.SessionManager;
@@ -78,6 +79,25 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         return(category);
+    }
+
+    public Rating popListrating(JSONObject jo){
+        Rating rating = new Rating();
+
+        try {
+            rating.setId(jo.getString("id_rating"));
+            rating.setIdUser(jo.getString("id_user"));
+            rating.setIdPlace(jo.getString("id_place"));
+            rating.setValue(jo.getString("rating_value"));
+            rating.setText(jo.getString("rating_text"));
+            rating.setNameUser(jo.getString("name_user"));
+            rating.setEmailUser(jo.getString("email_user"));
+            rating.setDateTime(jo.getString("date_time"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return(rating);
     }
 
     public Place popListPlaces(JSONObject jo){

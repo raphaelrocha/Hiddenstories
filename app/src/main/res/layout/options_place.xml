@@ -6,7 +6,7 @@
     android:padding="10dp">
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="75dp"
         android:layout_height="36dp"
         android:id="@+id/button_comment"
         android:gravity="center"

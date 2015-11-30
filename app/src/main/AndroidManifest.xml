@@ -37,23 +37,23 @@
         <activity
             android:name=".PlaceActivity"
             android:label="@string/title_activity_place"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlaceListActivity"
             android:label="@string/title_activity_place_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CategoryListActivity"
             android:label="@string/title_activity_category_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchableActivity"
             android:label="@string/title_activity_searchable"
@@ -70,6 +70,14 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CommentaryListActivity"
+            android:label="@string/title_activity_commentary_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RatingListActivity"
+            android:label="@string/title_activity_rating_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

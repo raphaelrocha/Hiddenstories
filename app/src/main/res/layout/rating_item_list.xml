@@ -1,0 +1,89 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="false"
+    app:cardPreventCornerOverlap="false"
+    app:cardMaxElevation="3dp"
+    app:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_user"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:fadeDuration="300"
+            fresco:failureImage="@drawable/error_img"
+            fresco:placeholderImage="@color/black"
+            fresco:retryImage="@drawable/retry_img"
+            android:background="@color/black"/>
+
+        <RatingBar
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/small_ratingbar"
+            android:layout_gravity="center"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:rating="0"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleSmall"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/tv_text"
+            android:layout_alignEnd="@+id/tv_text" />
+
+        <TextView
+            android:padding="4dp"
+            android:textColor="@color/colorPrimarytext"
+            android:id="@+id/tv_name_user"
+            android:text="Nome do usuário"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_alignBottom="@+id/small_ratingbar"
+            android:layout_toRightOf="@+id/iv_user"
+            android:layout_toEndOf="@+id/iv_user" />
+
+        <TextView
+            android:padding="4dp"
+            android:layout_below="@+id/tv_name_user"
+            android:text="Texto de exemplo para poder ver como fica o texto de um comentário, a partir daqui e só blá, blá, blá, blá, blá, blá, blá, blá, blá, blá, blá, blá."
+            android:id="@+id/tv_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/iv_user"
+            android:layout_toEndOf="@+id/iv_user" />
+
+        <TextView
+            android:padding="4dp"
+            android:id="@+id/tv_date_time"
+            android:text="30/11/2015"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_text"
+            android:layout_alignRight="@+id/tv_text"
+            android:layout_alignEnd="@+id/tv_text" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
