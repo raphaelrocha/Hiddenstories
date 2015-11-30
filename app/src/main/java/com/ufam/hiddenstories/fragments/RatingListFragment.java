@@ -41,6 +41,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
     private List<Rating> mList;
     private VolleyConnection mVolleyConnection;
     private Place mPlace;
+    private int mCONTA_SNACK_ALERT; //garante q seja exibido apenas um snackalert no erro.
 
 
     @Override
@@ -50,6 +51,8 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
         ((BaseActivity)getActivity()).forceStartVolleyQueue();
 
         mVolleyConnection = new VolleyConnection(this);
+
+        mCONTA_SNACK_ALERT=0;
 
         mPlace = getArguments().getParcelable("place");
 
@@ -95,11 +98,16 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
                 Rating rating = new Rating();
-                rating = ((BaseActivity)getActivity()).popListrating(ja.getJSONObject(i));
+                rating = ((BaseActivity)getActivity()).popListRating(ja.getJSONObject(i));
                 ratings.add(rating);
             }
-        }catch (JSONException e){}
-
+        }catch (JSONException e){
+            if(mCONTA_SNACK_ALERT==0){
+                mCONTA_SNACK_ALERT++;
+                Log.i("SNAK", "---- Lançou o snak ----");
+                ((BaseActivity)getActivity()).showLongSnack(getResources().getString(R.string.list_empty));
+            }
+        }
         setList(ratings);
     }
 
@@ -205,6 +213,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
     @Override
     public void onResume() {
         super.onResume();
+        mCONTA_SNACK_ALERT=0;
         callServer();
     }
 }

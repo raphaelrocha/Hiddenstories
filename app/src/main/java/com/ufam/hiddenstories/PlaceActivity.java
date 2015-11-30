@@ -355,9 +355,12 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     }
 
     private void showMap(){
-        Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra("place", mPlace);
-        this.startActivity(intent);
+        //Intent intent = new Intent(this, MapActivity.class);
+        //intent.putExtra("place", mPlace);
+        //this.startActivity(intent);
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("place",mPlace);
+        startActivity(intent);
     }
 
     @Override

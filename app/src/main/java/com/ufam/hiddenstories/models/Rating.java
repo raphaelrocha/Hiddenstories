@@ -16,6 +16,15 @@ public class Rating implements Parcelable {
     String nameUser;
     String emailUser;
     String dateTime;
+    String imageUser;
+
+    public String getImageUser() {
+        return imageUser;
+    }
+
+    public void setImageUser(String imageUser) {
+        this.imageUser = imageUser;
+    }
 
     public String getDateTime() {
         return dateTime;

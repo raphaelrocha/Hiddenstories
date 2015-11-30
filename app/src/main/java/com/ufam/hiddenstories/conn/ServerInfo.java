@@ -35,6 +35,6 @@ public class ServerInfo {
     //public static final String imageFolder = "http://192.168.1.133/quebragalho/images/__w-200-400-600-800-1000__/";
     //AWS
     //public static final String imageFolder = "http://ec2-54-233-85-160.sa-east-1.compute.amazonaws.com/quebragalho/images/__w-200-400-600-800-1000__/";
-    public static final String imageFolder = SERVER_ADDR+"/historyapp/web/images/__w-200-400-600-800-1000__/";
+    public static final String IMAGE_FOLDER = SERVER_ADDR+"/historyapp/web/images/__w-200-400-600-800-1000__/";
 
 }

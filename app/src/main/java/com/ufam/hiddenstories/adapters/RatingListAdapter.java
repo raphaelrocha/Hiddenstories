@@ -1,18 +1,29 @@
 package com.ufam.hiddenstories.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.R;
 import com.ufam.hiddenstories.interfaces.RecyclerViewOnClickListenerHack;
 import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Rating;
+import com.ufam.hiddenstories.models.User;
+import com.ufam.hiddenstories.tools.DataUrl;
 
 import java.util.List;
 import java.util.Random;
@@ -28,6 +39,7 @@ public class RatingListAdapter extends RecyclerView.Adapter<RatingListAdapter.My
     private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
     private float scale;
     private int width, height, roundPixels;
+
 
 
     public RatingListAdapter(Context c, List<Rating> l){
@@ -96,10 +108,11 @@ public class RatingListAdapter extends RecyclerView.Adapter<RatingListAdapter.My
                 //Log.i("LOG", "onSubmit");
             }
         };
+        */
 
         int w = 0;
-        if( myViewHolder.ivPlace.getLayoutParams().width == FrameLayout.LayoutParams.MATCH_PARENT
-            || myViewHolder.ivPlace.getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT){
+        if( myViewHolder.ivUser.getLayoutParams().width == FrameLayout.LayoutParams.MATCH_PARENT
+            || myViewHolder.ivUser.getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT){
 
             Display display = ( (Activity) mContext ).getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -113,18 +126,15 @@ public class RatingListAdapter extends RecyclerView.Adapter<RatingListAdapter.My
             }
         }
 
-        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getPicturePlace(), w));
+        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getImageUser(), w));
         DraweeController dc = Fresco.newDraweeControllerBuilder()
                 .setUri( uri )
-                .setOldController( myViewHolder.ivPlace.getController() )
+                .setOldController( myViewHolder.ivUser.getController() )
                 .build();
 
         RoundingParams rp = RoundingParams.fromCornersRadii(roundPixels, roundPixels, 0, 0);
-        myViewHolder.ivPlace.setController(dc);
-        myViewHolder.ivPlace.getHierarchy().setRoundingParams(rp);
-
-        myViewHolder.tvPlaceCity.setText(mList.get(position).getCity() + "/" + mList.get(position).getDistrict());
-        myViewHolder.tvPlaceName.setText(mList.get(position).getName());*/
+        myViewHolder.ivUser.setController(dc);
+        myViewHolder.ivUser.getHierarchy().setRoundingParams(rp);
 
         myViewHolder.tvNameUser.setText(mList.get(position).getNameUser());
         myViewHolder.ratingBar.setRating(Float.parseFloat(mList.get(position).getValue()));

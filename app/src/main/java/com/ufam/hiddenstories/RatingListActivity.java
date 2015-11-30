@@ -39,8 +39,5 @@ public class RatingListActivity extends BaseActivity {
             ft.replace(R.id.rating_list_frag_container, mFrag, "mainFrag");
             ft.commit();
         }
-
-
     }
-
 }

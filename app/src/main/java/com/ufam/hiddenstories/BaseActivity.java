@@ -73,7 +73,7 @@ public class BaseActivity extends AppCompatActivity {
         try {
             category.setId(jo.getString("id"));
             category.setName(jo.getString("name"));
-            category.setPicture(ServerInfo.imageFolder+jo.getString("picture"));
+            category.setPicture(ServerInfo.IMAGE_FOLDER+jo.getString("picture"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,21 +81,19 @@ public class BaseActivity extends AppCompatActivity {
         return(category);
     }
 
-    public Rating popListrating(JSONObject jo){
+    public Rating popListRating(JSONObject jo)throws JSONException{
         Rating rating = new Rating();
 
-        try {
-            rating.setId(jo.getString("id_rating"));
-            rating.setIdUser(jo.getString("id_user"));
-            rating.setIdPlace(jo.getString("id_place"));
-            rating.setValue(jo.getString("rating_value"));
-            rating.setText(jo.getString("rating_text"));
-            rating.setNameUser(jo.getString("name_user"));
-            rating.setEmailUser(jo.getString("email_user"));
-            rating.setDateTime(jo.getString("date_time"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        rating.setId(jo.getString("id_rating"));
+        rating.setIdUser(jo.getString("id_user"));
+        rating.setIdPlace(jo.getString("id_place"));
+        rating.setValue(jo.getString("rating_value"));
+        rating.setText(jo.getString("rating_text"));
+        rating.setNameUser(jo.getString("name_user"));
+        rating.setEmailUser(jo.getString("email_user"));
+        rating.setDateTime(jo.getString("date_time"));
+        rating.setImageUser(ServerInfo.IMAGE_FOLDER+jo.getString("picture_user"));
+
 
         return(rating);
     }
@@ -113,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
             place.setName(jo.getString("name"));
             place.setDescription(jo.getString("description"));
             place.setAddr(jo.getString("addr"));
-            place.setPicturePlace(ServerInfo.imageFolder+jo.getString("picture_place"));
+            place.setPicturePlace(ServerInfo.IMAGE_FOLDER+jo.getString("picture_place"));
             place.setLocation(jo.getString("location"));
             place.setCategory(jo.getString("name_category"));
             place.setDistrict(jo.getString("name_district"));
@@ -131,7 +129,7 @@ public class BaseActivity extends AppCompatActivity {
         user.setId(jo.getString("id"));
         user.setEmail(jo.getString("email"));
         user.setName(jo.getString("name"));
-        user.setPictureProfile(ServerInfo.imageFolder+jo.getString("picture_profile"));
+        user.setPictureProfile(ServerInfo.IMAGE_FOLDER+jo.getString("picture_profile"));
         return user;
     }
 

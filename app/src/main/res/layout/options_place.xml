@@ -6,16 +6,16 @@
     android:padding="10dp">
 
     <TextView
-        android:layout_width="75dp"
+        android:layout_width="85dp"
         android:layout_height="36dp"
         android:id="@+id/button_comment"
         android:gravity="center"
         android:text="@string/option_commentary"
-        android:textSize="12sp"
+        android:textSize="14sp"
         />
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="40dp"
         android:layout_height="36dp"
         android:id="@+id/button_album"
         android:text="@string/option_album"
@@ -25,11 +25,11 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/button_comment"
         android:layout_toEndOf="@+id/button_comment"
-        android:textSize="12sp"/>
+        android:textSize="14sp"/>
 
     <TextView
         android:text="@string/option_map"
-        android:layout_width="60dp"
+        android:layout_width="40dp"
         android:layout_height="36dp"
         android:id="@+id/button_location"
         android:layout_marginLeft="16dp"
@@ -38,10 +38,10 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/button_album"
         android:layout_toEndOf="@+id/button_album"
-        android:textSize="12sp"/>
+        android:textSize="14sp"/>
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="50dp"
         android:layout_height="36dp"
         android:id="@+id/button_rat"
         android:text="@string/option_rat"
@@ -51,7 +51,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/button_location"
         android:layout_toEndOf="@+id/button_location"
-        android:textSize="12sp"/>
+        android:textSize="14sp"/>
 
     <ImageButton
         android:layout_width="36dp"
