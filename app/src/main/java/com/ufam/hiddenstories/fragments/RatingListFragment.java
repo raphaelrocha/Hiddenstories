@@ -59,7 +59,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
         callServer();
     }
 
-    private void callServer (){
+    public void callServer (){
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("id_place",mPlace.getId());
         mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_RATING_LIST, params, "get-list-ratings");

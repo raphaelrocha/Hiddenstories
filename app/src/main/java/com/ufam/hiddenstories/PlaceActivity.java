@@ -65,7 +65,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     private VolleyConnection mVolleyConnection;
     private ImageButton btFavorite;
     private TextView btMap, btRat, btAlbum, btComments;
-    private Rating rating;
+    private Rating mRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,6 +315,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     private void comment_btn(){
         Intent intent = new Intent(this, RatingListActivity.class);
         intent.putExtra("place",mPlace);
+        intent.putExtra("rating",mRating);
         startActivity(intent);
     }
 
@@ -403,17 +404,17 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         final EditText comments = (EditText) rankDialog.findViewById(R.id.edt_comment_rat);
         comments.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
-        if(rating==null){
-            rating = new Rating();
+        if(mRating==null){
+            mRating = new Rating();
         }
-        if(rating.getValue()!=null){
-            ratingBar.setRating(Float.parseFloat(rating.getValue()));
+        if(mRating.getValue()!=null){
+            ratingBar.setRating(Float.parseFloat(mRating.getValue()));
             TAG = "update-rat";
-            if(rating.getText()!=null){
-                comments.setText(rating.getText());
+            if(mRating.getText()!=null){
+                comments.setText(mRating.getText());
             }
         }else{
-            rating = new Rating();
+            mRating = new Rating();
         }
 
         final String SEND_TAG = TAG;
@@ -424,12 +425,12 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
                 //ratingBar.getRating();
                 Log.i("RANK DIALOG","CLICK");
                 User user = getUserFromPrefers();
-                rating.setIdUser(user.getId());
-                rating.setIdPlace(mPlace.getId());
-                rating.setValue(Integer.toString(Math.round(ratingBar.getRating())));
-                rating.setText(comments.getText().toString().trim());
+                mRating.setIdUser(user.getId());
+                mRating.setIdPlace(mPlace.getId());
+                mRating.setValue(Integer.toString(Math.round(ratingBar.getRating())));
+                mRating.setText(comments.getText().toString().trim());
                 //EditText comments = (EditText) rankDialog.findViewById(R.id.edt_comment_rat);
-                setRating(rating,SEND_TAG);
+                setRating(mRating,SEND_TAG);
                 rankDialog.dismiss();
             }
         });
@@ -482,14 +483,14 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
                 showLongSnack(mPlace.getName()+" foi removido da sua lista de locais favoritos.");
             }
             if(TAG.equals("get-rat")){
-                if(rating==null){
-                    rating = new Rating();
+                if(mRating==null){
+                    mRating = new Rating();
                 }
-                rating.setId(response.getString("id"));
-                rating.setIdUser(response.getString("id_user"));
-                rating.setIdPlace(response.getString("id_place"));
-                rating.setValue(response.getString("rating_value"));
-                rating.setText(response.getString("rating_text"));
+                mRating.setId(response.getString("id"));
+                mRating.setIdUser(response.getString("id_user"));
+                mRating.setIdPlace(response.getString("id_place"));
+                mRating.setValue(response.getString("rating_value"));
+                mRating.setText(response.getString("rating_text"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
