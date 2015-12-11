@@ -2,7 +2,7 @@ package com.ufam.hiddenstories.conn;
 
 import android.util.Log;
 
-import com.android.volley.Request;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -12,7 +12,6 @@ import com.ufam.hiddenstories.services.CustomJsonObjectRequest;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -43,76 +42,82 @@ public class VolleyConnection {
         }
     }
 
-
-    public void callServerApiByJsonArrayRequest(final String url, HashMap<String, String> data, final String TAG){
+    public void callServerApiByJsonArrayRequest(final String url, int requestMethod, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
-        /*if(data!=null){
-            params.put("data", data);
-        }
-        if(method!=null){
-            params.put("method", method);
-        }*/
         Gson gson = new Gson();
-        //
-        // HashMap<String,String> jsonParam = new HashMap<String,String>();
-        params.put("json",gson.toJson(data));
+        params.put("json", gson.toJson(data));
 
         final String activityName = mCustomVolleyCallbackInterface.getClass().getSimpleName();
-        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + params);
-        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + TAG);
+        Log.i("SEND MESSAGE URL","["+activityName+"] : "+url);
+        if(TAG!=null){
+            Log.i("SEND MESSAGE TAG","["+activityName+"] : "+TAG);
+        }
+        /*if(data!=null){
+            Log.i("SEND MESSAGE DATA","["+activityName+"] : "+data);
+            Log.i("SEND MESSAGE JSON", "[" + activityName + "] : " + new JSONObject(data).toString());
+        }*/
 
-        CustomJsonArrayRequest request = new CustomJsonArrayRequest(Request.Method.POST,
+        Log.i("SEND MESSAGE PARAMS", "[" + activityName + "] : " + params.toString());
+        //Request.Method.POST
+        CustomJsonArrayRequest request = new CustomJsonArrayRequest(requestMethod,
                 url,
                 params,
                 new Response.Listener<JSONArray>(){
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i("Script", "TAG: " + TAG + " | SUCCESS: " + response);
+                        Log.i("Script", "TAG: "+TAG+" | SUCCESS: " + response);
                         mCustomVolleyCallbackInterface.deliveryResponse(response,TAG);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("Script", "TAG: " + TAG + " | ERROR: " + error);
+                        Log.i("Script", "TAG: "+TAG+" | ERROR: " + error);
                         mCustomVolleyCallbackInterface.deliveryError(error,TAG);
                     }
                 });
 
         request.setTag(activityName);
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        500000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+        );
         this.setVolleyTag(activityName);
         //rq.add(request);
         VolleyConnectionQueue.getINSTANCE().addQueue(request);
     }
 
     //METODO PARA ENVIO E RECEBIMENTO DE JSONOBJECTS
-    public void callServerApiByJsonObjectRequest(final String url, HashMap<String, String> data, final String TAG){
+    public void callServerApiByJsonObjectRequest(final String url, int requestMethod, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
-        /*if(data!=null){
-            params.put("data", data);
-        }
-        if(method!=null){
-            params.put("method", method);
-        }*/
         Gson gson = new Gson();
-        //
-        // HashMap<String,String> jsonParam = new HashMap<String,String>();
-        params.put("json",gson.toJson(data));
+        params.put("json", gson.toJson(data));
 
         final String activityName = mCustomVolleyCallbackInterface.getClass().getSimpleName();
-        Log.i("SEND MESSAGE", "[" + activityName + "] url: " + url + " data: " + params);
-        Log.i("SEND MESSAGE FlAG", "[" + activityName + "] flag: " + TAG);
+        Log.i("SEND MESSAGE URL","["+activityName+"] : "+url);
+        if(TAG!=null){
+            Log.i("SEND MESSAGE TAG","["+activityName+"] : "+TAG);
+        }
+        /*if(data!=null){
+            Log.i("SEND MESSAGE DATA","["+activityName+"] : "+data);
+            Log.i("SEND MESSAGE JSON", "[" + activityName + "] : " + new JSONObject(data).toString());
+        }*/
 
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,
+        Log.i("SEND MESSAGE PARAMS", "[" + activityName + "] : " + params.toString());
+        //Request.Method.POST
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(requestMethod,
                 url,
                 params,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
                         //envia a resposta de sucesso para a activity
-                        Log.i("Script", "TAG: " + TAG + " | SUCCESS: " + response);
+                        Log.i("Script", "TAG: "+TAG+" | SUCCESS: " + response);
                         mCustomVolleyCallbackInterface.deliveryResponse(response, TAG);
                     }
                 },
@@ -120,12 +125,19 @@ public class VolleyConnection {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //envia a mensagem de erro para a activity
-                        Log.i("Script", "TAG: " + TAG + " | ERROR: " + error);
+                        Log.i("Script", "TAG: "+TAG+" | ERROR: " + error);
                         mCustomVolleyCallbackInterface.deliveryError(error, TAG);
                     }
                 });
 
         request.setTag("tagPhotoActivity");
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        500000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+        );
         this.setVolleyTag("tagPhotoActivity");
         //rq.add(request);
         VolleyConnectionQueue.getINSTANCE().addQueue(request);

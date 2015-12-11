@@ -30,6 +30,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.generic.RoundingParams;
@@ -324,7 +325,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_user", userLogged.getId());
         params.put("id_place",mPlace.getId());
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_RATING, params, "get-rat");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_RATING, Request.Method.POST, params, "get-rat");
         Log.i("APP", "Pegoou rating: " + params.toString());
     }
 
@@ -333,7 +334,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_user", userLogged.getId());
         params.put("id_place",p.getId());
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.CHECK_FAVORITE, params, "chk-fav");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.CHECK_FAVORITE, Request.Method.POST, params, "chk-fav");
         Log.i("APP", "Verificou favorito: " + params.toString());
     }
 
@@ -342,7 +343,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_user", userLogged.getId());
         params.put("id_place",p.getId());
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_FAVORITE, params, "set-fav");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_FAVORITE, Request.Method.POST, params, "set-fav");
         Log.i("APP", "Marcou favorito: " + params.toString());
     }
 
@@ -351,7 +352,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_user", userLogged.getId());
         params.put("id_place",p.getId());
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UNSET_FAVORITE, params, "unset-fav");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UNSET_FAVORITE, Request.Method.POST, params, "unset-fav");
         Log.i("APP", "Desmarcou favorito: " + params.toString());
     }
 
@@ -448,12 +449,12 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
         if(TAG.equals("set-rat")){
             Log.i("PROFESSIONAL_PROFILE","set commentary: "+params.toString());
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, params,TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, Request.Method.POST, params,TAG);
 
         }else if(TAG.equals("update-rat")){
             Log.i("PROFESSIONAL_PROFILE", "update commentary: " + params.toString());
             //Log.i("PROFESSIONAL_PROFILE","update commentary: "+getPrefs().getString("ul-id", null) + ";~;" + getProfessional().getIdProfessional()+";~;"+Math.round(value)+";~;"+comments);
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, params, TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, Request.Method.POST, params, TAG);
         }
     }
 

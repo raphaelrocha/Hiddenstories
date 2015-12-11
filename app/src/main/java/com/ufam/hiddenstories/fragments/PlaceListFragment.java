@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceActivity;
@@ -48,7 +49,6 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     protected List<Place> mList;
     protected android.support.design.widget.FloatingActionButton fab;
     protected VolleyConnection mVolleyConnection;
-
     private Category mCategory;
 
     @Override
@@ -71,7 +71,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         HashMap<String, String> params = new  HashMap<String, String> ();
         params.put("id_cat", mCategory.getId());
 
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT,params,null);
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,params,null);
     }
 
     @Override
@@ -252,4 +252,10 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         Log.i("PLACELISTFRAG","onResume()");
         mCategory = getArguments().getParcelable("category");
     }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        callServer();
+    }
 }

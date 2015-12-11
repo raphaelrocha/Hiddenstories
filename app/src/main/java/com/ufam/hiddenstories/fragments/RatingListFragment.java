@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceListActivity;
@@ -62,7 +63,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
     public void callServer (){
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("id_place",mPlace.getId());
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_RATING_LIST, params, "get-list-ratings");
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_RATING_LIST, Request.Method.POST, params, "get-list-ratings");
     }
 
     @Override

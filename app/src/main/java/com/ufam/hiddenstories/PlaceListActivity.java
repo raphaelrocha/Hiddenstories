@@ -2,6 +2,7 @@ package com.ufam.hiddenstories;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class PlaceListActivity extends BaseActivity {
     private PlaceListFragment mFrag;
     private SearchView searchView;
     private Menu menuSearch;
+    Category mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class PlaceListActivity extends BaseActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_place_list);
 
-        Category category = getIntent().getParcelableExtra("category");
+        mCategory = getIntent().getParcelableExtra("category");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("Locais");//texto temporário com o nome do local
@@ -59,7 +61,7 @@ public class PlaceListActivity extends BaseActivity {
             mFrag = new PlaceListFragment();
             //mFrag.setCategory(category);
             Bundle bundle = new Bundle();
-            bundle.putParcelable("category",category);
+            bundle.putParcelable("category",mCategory);
             mFrag.setArguments(bundle);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.place_list_frag_container_AComentaryList, mFrag, "mainFrag");
@@ -114,5 +116,28 @@ public class PlaceListActivity extends BaseActivity {
 
         return true;
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add_new_place) {
+            //showLongSnack("Adicionar um comentário");
+            newPlace();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void newPlace(){
+        Intent intent = new Intent(this,FormPlaceActivity.class);
+        intent.putExtra("category",mCategory);
+        startActivityForResult(intent,0);
     }
 }

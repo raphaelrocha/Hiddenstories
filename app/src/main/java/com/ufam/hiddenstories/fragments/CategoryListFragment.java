@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceActivity;
@@ -56,7 +57,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     }
 
     private void callServer (){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, null, null);
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, Request.Method.GET, null, null);
     }
 
     @Override

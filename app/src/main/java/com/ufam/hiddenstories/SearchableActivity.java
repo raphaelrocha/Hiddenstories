@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
@@ -185,7 +186,7 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
         HashMap<String, String> params = new  HashMap<String, String> ();
         params.put("query", query);
 
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.FIND_PLACE,params,null);
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.FIND_PLACE, Request.Method.POST,params,null);
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
@@ -156,12 +157,12 @@ public class RatingListActivity extends BaseActivity implements CustomVolleyCall
 
         if(TAG.equals("set-rat")){
             Log.i("PROFESSIONAL_PROFILE","set commentary: "+params.toString());
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, params,TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, Request.Method.POST, params,TAG);
 
         }else if(TAG.equals("update-rat")){
             Log.i("PROFESSIONAL_PROFILE", "update commentary: " + params.toString());
             //Log.i("PROFESSIONAL_PROFILE","update commentary: "+getPrefs().getString("ul-id", null) + ";~;" + getProfessional().getIdProfessional()+";~;"+Math.round(value)+";~;"+comments);
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, params, TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, Request.Method.POST, params, TAG);
         }
     }
 

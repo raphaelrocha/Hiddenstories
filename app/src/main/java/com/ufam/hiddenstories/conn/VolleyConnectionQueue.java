@@ -2,6 +2,7 @@ package com.ufam.hiddenstories.conn;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -14,6 +15,7 @@ public class VolleyConnectionQueue {
 
     private static VolleyConnectionQueue INSTANCE;
     private RequestQueue rq;
+
 
     public static synchronized VolleyConnectionQueue getINSTANCE(){
         if(INSTANCE==null){

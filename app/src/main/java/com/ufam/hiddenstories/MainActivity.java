@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
@@ -39,6 +40,8 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         setSupportActionBar(toolbar);
 
         Button btLogin = (Button) findViewById(R.id.btn_login);
+        Button btNewUser = (Button) findViewById(R.id.btn_new_user);
+
         final EditText edtLoginUser = (EditText) findViewById(R.id.edt_login_user);
         final EditText edtLoginPasswd = (EditText) findViewById(R.id.edt_login_passwd);
 
@@ -51,6 +54,13 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
                 String user = edtLoginUser.getText().toString().trim();
                 String passwd = edtLoginPasswd.getText().toString().trim();
                 login(user,passwd);
+            }
+        });
+
+        btNewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newUser();
             }
         });
 
@@ -68,7 +78,12 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         params.put("user",user);
         params.put("passwd",passwd);
         VolleyConnection conn = new VolleyConnection(this);
-        conn.callServerApiByJsonArrayRequest(ServerInfo.LOGIN,params,"LOGIN");
+        conn.callServerApiByJsonArrayRequest(ServerInfo.LOGIN, Request.Method.POST,params,"LOGIN");
+    }
+
+    private void newUser(){
+        Intent intent = new Intent(this, FormUserActivity.class);
+        startActivityForResult(intent,0);
     }
 
     private void savePrefers(JSONArray ja){
@@ -150,7 +165,7 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

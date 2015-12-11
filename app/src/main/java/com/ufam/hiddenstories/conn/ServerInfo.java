@@ -5,7 +5,7 @@ package com.ufam.hiddenstories.conn;
  */
 public class ServerInfo {
 
-    public static final String fileImageExt = "jpg";
+    public static final String EXTENSION_IMAGE_FILE = "jpg";
     public static final String LOGIN_ADM_FACEBOOK = "facebook-adm@qg.com";
     public static final String PASSWD_ADM_FACEBOOK = "jfhgjtu685464bdtdbVGA";
 
@@ -26,6 +26,7 @@ public class ServerInfo {
     public static final String  UPDATE_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/update";
     public static final String  GET_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/get";
     public static final String  GET_RATING_LIST = SERVER_ADDR + SERVER_FOLDER + "/rating/list";
+    public static final String  CREATE_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/create";
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";
