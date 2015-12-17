@@ -23,6 +23,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
 import com.ufam.hiddenstories.models.Category;
+import com.ufam.hiddenstories.models.Picture;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.models.Rating;
 import com.ufam.hiddenstories.models.User;
@@ -140,6 +141,16 @@ public class BaseActivity extends AppCompatActivity {
         user.setEmail(getPrefs().getString("ul-email",null));
         user.setPictureProfile(getPrefs().getString("ul-picture_profile",null));
         return user;
+    }
+
+    public Picture popPicture(JSONObject jo) throws JSONException {
+        Picture p = new Picture();
+        p.setId(jo.getString("id"));
+        p.setIdPlace(jo.getString("id_place"));
+        p.setText(jo.getString("picture_text"));
+        p.setDateTime(jo.getString("date_time"));
+        p.setFile(ServerInfo.IMAGE_FOLDER+jo.getString("file_string"));
+        return p;
     }
 
     public void showSnack(String msg){

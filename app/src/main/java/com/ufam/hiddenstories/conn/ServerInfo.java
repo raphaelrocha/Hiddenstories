@@ -27,6 +27,8 @@ public class ServerInfo {
     public static final String  GET_RATING = SERVER_ADDR + SERVER_FOLDER + "/rating/get";
     public static final String  GET_RATING_LIST = SERVER_ADDR + SERVER_FOLDER + "/rating/list";
     public static final String  CREATE_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/create";
+    public static final String  LIST_PICTURE_BY_PLACE = SERVER_ADDR + SERVER_FOLDER + "/picture/getbyplace";
+    public static final String  SEND_PICTURE = SERVER_ADDR + SERVER_FOLDER + "/picture/send";
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";

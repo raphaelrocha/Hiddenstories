@@ -7,55 +7,61 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_place" tools:context="com.ufam.hiddenstories.PlaceActivity">
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include layout="@layout/options_place"
-                android:id="@+id/options"/>
-
-            <TextView
-                android:layout_below="@id/options"
-                android:id="@+id/place_tv_name"
-                android:paddingTop="20dp"
-                android:textSize="20sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_below="@+id/place_tv_name"
-                android:id="@+id/place_tv_city"
-                android:textSize="16sp"
-                android:textColor="@color/colorSecond"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_below="@+id/place_tv_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/place_ll_tv_description"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/place_tv_description"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimarytext"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                   />
-            </LinearLayout>
+                    android:orientation="vertical">
 
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+                    <include layout="@layout/options_place"
+                        android:id="@+id/options"/>
+
+                    <TextView
+                        android:layout_below="@id/options"
+                        android:id="@+id/place_tv_name"
+
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_below="@+id/place_tv_name"
+                        android:id="@+id/place_tv_city"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorSecond"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_below="@+id/place_tv_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/place_ll_tv_description"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/place_tv_description"
+                            android:layout_marginTop="10dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimarytext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+
+
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -118,7 +118,12 @@
         <activity
             android:name=".FormUserActivity"
             android:label="@string/title_activity_form_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AlbumActivity"
+            android:label="@string/title_activity_album"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PhotoActivity"></activity>
     </application>
 
 </manifest>

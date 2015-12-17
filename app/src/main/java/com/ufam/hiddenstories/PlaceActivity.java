@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -38,6 +39,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
+import com.ufam.hiddenstories.fragments.RatingListFragment;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.models.Rating;
@@ -143,7 +145,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         btRat = (TextView) findViewById(R.id.button_rat);
         btAlbum = (TextView) findViewById(R.id.button_album);
         btComments = (TextView) findViewById(R.id.button_comment);
-
+        btRat.setVisibility(View.INVISIBLE);
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -245,6 +247,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
         getRating();
         checkFavorite(mPlace);
+
     }
 
     private void changeFavIcon(boolean b){
@@ -310,7 +313,10 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     }
 
     private void album_btn(){
-        showLongSnack("Aqui vai abrir a tela de fotos.");
+        Intent intent = new Intent(this, AlbumActivity.class);
+        intent.putExtra("place",mPlace);
+        intent.putExtra("rating",mRating);
+        startActivity(intent);
     }
 
     private void comment_btn(){

@@ -49,7 +49,7 @@ public class RatingListActivity extends BaseActivity implements CustomVolleyCall
         //toolbar.setTitle("Avaliações e comentáraios");
         //setSupportActionBar(toolbar);
 
-        Toolbar toolbar = setUpToolbar("Avaliações e comentáraios",true,false);
+        Toolbar toolbar = setUpToolbar("Comentários",true,false);
 
         mVolleyConnection = new VolleyConnection(this);
 

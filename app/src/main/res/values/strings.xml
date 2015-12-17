@@ -1,10 +1,14 @@
 <resources>
+
     <string name="app_name">Hidden Stories</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_place">PlaceActivity</string>
 
     <string name="tmp_place_name">Teatro Amazonas</string>
     <string name="tmp_place_city">Manaus / AM</string>
+
+    <string name="legend_album">Descrição</string>
+    <string name="response_bt">Enviar</string>
 
     <string name="tmp_place_description">A história do Teatro Amazonas inicia-se em 1886, quando o deputado A. J. Fernandes Júnior apresentou o projeto para a construção de um teatro em marmore, na cidade de Manaus. A proposta foi aprovada pela Assembléia Provincial do Amazonas, e começaram as discussões a respeito da construção do prédio. Manaus, que vivia o auge do ciclo da borracha, era uma das mais prósperas cidades do mundo, embalada pela riqueza advinda do léitex da seringueira, produto altamente valorizado pelas indústrias europeias e americanas. A cidade necessitava de um lugar onde pudessem se apresentar as companhias de espetáculos estrangeiros e a construção do teatro, assim, era uma exigência da época, assim como existia um casa de ópera na cidade de Belém, o recém-inaugurado Theatro da Paz.
 O projeto arquitetônico escolhido foi o de autoria do Gabinete Português de Engenharia e Arquitetura de Lisboa, em 1883. No entanto, em meio às discussões a respeito do local para a edificação e os custos da obra, a pedra fundamental só foi lançada em 1884. As obras transcorreram de forma lenta e somente no governo de Eduardo Ribeiro, no apogeu do ciclo da borracha, a construção tomou impulso. Foram trazidos arquitetos, construtores, pintores e escultores da Europa para a realização da obra. A decoração interna ficou ao encargo de Crispim do Amaral, com exceção do Salão Nobre, a área mais luxuosa do prédio, entregue ao artista italiano Domenico de Angelis. O teatro foi finalmente inaugurado no dia 31 de Dezembro de 1896[1] .
@@ -65,5 +69,6 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
     <string name="erro_000020">Algo deu Errado.(000020)</string>
     <string name="title_activity_form_place">FormPlaceActivity</string>
     <string name="title_activity_form_user">FormUserActivity</string>
+    <string name="title_activity_album">AlbumActivity</string>
 
 </resources>
