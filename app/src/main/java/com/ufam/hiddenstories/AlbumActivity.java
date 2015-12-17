@@ -101,7 +101,7 @@ public class AlbumActivity extends BaseActivity implements RecyclerViewOnClickLi
     private void callServer(){
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_place",mPlace.getId());
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.LIST_PICTURE_BY_PLACE, Request.Method.POST,params,"LIST_PICTURE_BY_PLACE");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.LIST_PICTURE_BY_PLACE, Request.Method.POST,params,"LIST_PICTURE_BY_PLACE");
     }
 
     private void sendImage(){
@@ -123,22 +123,42 @@ public class AlbumActivity extends BaseActivity implements RecyclerViewOnClickLi
     }
 
 
-    public void setCardView(JSONArray ja){
+    public void setCardView(JSONObject jo){
         ArrayList<Picture> pictures = new ArrayList<Picture>();
+        JSONArray ja = null;
         try {
-            for(int i = 0, tam = ja.length(); i < tam; i++){
-                Picture p = new Picture();
-                p = popPicture(ja.getJSONObject(i));
-                pictures.add(p);
-            }
-        }catch (JSONException e){
+            ja = jo.getJSONArray("pictures");
+        } catch (JSONException e) {
+            e.printStackTrace();
             if(mCONTA_SNACK_ALERT==0){
                 mCONTA_SNACK_ALERT++;
                 Log.i("SNAK", "---- Lançou o snak ----");
-                showLongSnack(getResources().getString(R.string.list_empty));
+                showLongSnack(getResources().getString(R.string.album_empty));
             }
         }
-        setList(pictures);
+        if(ja!=null){
+            try {
+                for(int i = 0, tam = ja.length(); i < tam; i++){
+                    Picture p = new Picture();
+                    p = popPicture(ja.getJSONObject(i));
+                    pictures.add(p);
+                }
+            }catch (JSONException e){
+                if(mCONTA_SNACK_ALERT==0){
+                    mCONTA_SNACK_ALERT++;
+                    Log.i("SNAK", "---- Lançou o snak ----");
+                    showLongSnack(getResources().getString(R.string.album_empty));
+                }
+            }
+            if(pictures.isEmpty()){
+                if(mCONTA_SNACK_ALERT==0){
+                    mCONTA_SNACK_ALERT++;
+                    Log.i("SNAK", "---- Lançou o snak ----");
+                    showLongSnack(getResources().getString(R.string.album_empty));
+                }
+            }
+            setList(pictures);
+        }
     }
 
     @Override
@@ -257,13 +277,18 @@ public class AlbumActivity extends BaseActivity implements RecyclerViewOnClickLi
     @Override
     public void deliveryResponse(JSONArray response, String TAG) {
         hideDialog();
-        setCardView(response);
+
     }
 
     @Override
     public void deliveryResponse(JSONObject response, String TAG) {
         hideDialog();
-        callServer();
+        if(TAG.equals("LIST_PICTURE_BY_PLACE")){
+            setCardView(response);
+        }else if(TAG.equals("SEND_PICTURE")){
+            callServer();
+        }
+
     }
 
     @Override
