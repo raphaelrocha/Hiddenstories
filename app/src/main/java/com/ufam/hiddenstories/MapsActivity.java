@@ -1,6 +1,9 @@
 package com.ufam.hiddenstories;
 
 import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -20,11 +23,26 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.tools.GMapV2Direction;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -86,9 +104,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
 
         MarkerOptions options = new MarkerOptions();
 
+        LatLng myLocation = null;
+
         //mostra a localização do device.
         if(l != null){
-            LatLng myLocation = new LatLng(l.getLatitude(), l.getLongitude());
+            myLocation = new LatLng(l.getLatitude(), l.getLongitude());
 
             options = new MarkerOptions();
             options.position(myLocation).title("Você está aqui.").draggable(true);
@@ -130,6 +150,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         });
 
         mMarkerPlace.showInfoWindow();
+
+        if(myLocation!=null){
+            route(myLocation, placeLocation,
+                    GMapV2Direction.MODE_DRIVING);
+        }
+
     }
 
 
@@ -149,5 +175,90 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         showLongSnack(getResources().getString(R.string.erro_000020));
+    }
+
+    protected void route(LatLng sourcePosition, LatLng destPosition, String mode) {
+        final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                try {
+                    Document doc = (Document) msg.obj;
+                    GMapV2Direction md = new GMapV2Direction();
+                    ArrayList<LatLng> directionPoint = md.getDirection(doc);
+                    PolylineOptions rectLine = new PolylineOptions().width(15).color(getResources().getColor(R.color.md_blue_400));
+
+                    for (int i = 0; i < directionPoint.size(); i++) {
+                        rectLine.add(directionPoint.get(i));
+                    }
+                    Polyline polylin = mMap.addPolyline(rectLine);md.getDurationText(doc);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ;
+        };
+
+        new GMapV2DirectionAsyncTask(handler, sourcePosition, destPosition, GMapV2Direction.MODE_DRIVING).execute();
+    }
+
+
+
+    public class GMapV2DirectionAsyncTask extends AsyncTask<String, Void, Document> {
+
+        private final String TAG = GMapV2DirectionAsyncTask.class.getSimpleName();
+        private Handler handler;
+        private LatLng  start, end;
+        private String mode;
+
+        public GMapV2DirectionAsyncTask(Handler handler, LatLng start, LatLng end, String mode) {
+            this.start = start;
+            this.end = end;
+            this.mode = mode;
+            this.handler = handler;
+        }
+
+        @Override
+        protected Document doInBackground(String... params) {
+
+            String url = "http://maps.googleapis.com/maps/api/directions/xml?"
+                    + "origin=" + start.latitude + "," + start.longitude
+                    + "&destination=" + end.latitude + "," + end.longitude
+                    + "&sensor=false&units=metric&mode=" + mode;
+            Log.d("url", url);
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpContext localContext = new BasicHttpContext();
+                HttpPost httpPost = new HttpPost(url);
+                HttpResponse response = httpClient.execute(httpPost, localContext);
+                InputStream in = response.getEntity().getContent();
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+                        .newDocumentBuilder();
+                Document doc = builder.parse(in);
+                return doc;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Document result) {
+            if (result != null) {
+                Log.d(TAG, "---- GMapV2DirectionAsyncTask OK ----");
+                Message message = new Message();
+                message.obj = result;
+                handler.dispatchMessage(message);
+            } else {
+                Log.d(TAG, "---- GMapV2DirectionAsyncTask ERROR ----");
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 }
