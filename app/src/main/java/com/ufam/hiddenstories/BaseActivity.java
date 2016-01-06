@@ -22,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.gson.Gson;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
 import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.City;
+import com.ufam.hiddenstories.models.Commentary;
 import com.ufam.hiddenstories.models.Country;
 import com.ufam.hiddenstories.models.District;
 import com.ufam.hiddenstories.models.Picture;
@@ -83,20 +85,48 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public Rating popListRating(JSONObject jo)throws JSONException{
+    public Rating popRatingObj(JSONObject jo)throws JSONException{
         Rating rating = new Rating();
 
-        rating.setId(jo.getString("id_rating"));
-        rating.setIdUser(jo.getString("id_user"));
-        rating.setIdPlace(jo.getString("id_place"));
+        rating.setId(jo.getString("id"));
         rating.setValue(jo.getString("rating_value"));
         rating.setText(jo.getString("rating_text"));
-        rating.setNameUser(jo.getString("name_user"));
-        rating.setEmailUser(jo.getString("email_user"));
         rating.setDateTime(jo.getString("date_time"));
-        rating.setImageUser(ServerInfo.IMAGE_FOLDER+jo.getString("picture_user"));
+
+        if(jo.has("user")){
+            rating.setUser(popUser(jo.getJSONObject("user")));
+        }
+
+        if(jo.has("place")){
+            rating.setPlace(popPlaceObj(jo.getJSONObject("place")));
+        }
 
         return(rating);
+    }
+
+    public Commentary popCommentaryObj(JSONObject jo){
+        Commentary c = null;
+        try {
+            c = new Commentary();
+            c.setId(jo.getString("id"));
+            c.setText(jo.getString("comment_text"));
+            c.setDateTime(jo.getString("date_time"));
+
+            if(jo.has("user")){
+                c.setUser(popUser(jo.getJSONObject("user")));
+            }
+
+            if(jo.has("place")){
+                c.setPlace(popPlaceObj(jo.getJSONObject("place")));
+            }
+
+            if(jo.has("rating")){
+                c.setRating(popRatingObj(jo.getJSONObject("rating")));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return(c);
     }
 
     public Country popCountryObj(JSONObject jo){
@@ -183,11 +213,24 @@ public class BaseActivity extends AppCompatActivity {
             place.setPicturePlace(ServerInfo.IMAGE_FOLDER+jo.getString("picture_place"));
             place.setLatitude(jo.getString("latitude"));
             place.setLongitude(jo.getString("longitude"));
+            place.setDateTime(jo.getString("date_time"));
             if(jo.has("district")){
                 place.setDistrict(popDistrictObj(jo.getJSONObject("district")));
             }
             if(jo.has("category")){
                 place.setCategory(popCategoryObj(jo.getJSONObject("category")));
+            }
+            if(jo.has("ratings")){
+                JSONArray ja = jo.getJSONArray("ratings");
+                ArrayList<Rating> ratings = new ArrayList<Rating>();
+                for(int i=0;i<ja.length();i++){
+                    Rating r = popRatingObj(ja.getJSONObject(i));
+                    ratings.add(r);
+                }
+                place.setRatings(ratings);
+            }
+            if(jo.has("distance")){
+                place.setDistance(jo.getString("distance"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -201,15 +244,6 @@ public class BaseActivity extends AppCompatActivity {
         user.setEmail(jo.getString("email"));
         user.setName(jo.getString("name"));
         user.setPictureProfile(ServerInfo.IMAGE_FOLDER+jo.getString("picture_profile"));
-        return user;
-    }
-
-    public User getUserFromPrefers(){
-        User user = new User();
-        user.setId(getPrefs().getString("ul-id",null));
-        user.setName(getPrefs().getString("ul-name",null));
-        user.setEmail(getPrefs().getString("ul-email",null));
-        user.setPictureProfile(getPrefs().getString("ul-picture_profile",null));
         return user;
     }
 
@@ -285,7 +319,8 @@ public class BaseActivity extends AppCompatActivity {
         return toolbar;
     }
 
-    public void showDialog(String msg) {
+    public void showDialog(String msg, boolean cancelable) {
+        dialog.setCancelable(cancelable);
         if (!dialog.isShowing()){
             dialog.setMessage(msg);
             dialog.setOnKeyListener(new Dialog.OnKeyListener() {
@@ -300,6 +335,7 @@ public class BaseActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
             dialog.show();
         }
     }
@@ -412,6 +448,25 @@ public class BaseActivity extends AppCompatActivity {
     //raio para buscas
     public int getDistanceRadius(){
         return getPrefs().getInt("ul-distance_radius",50);
+    }
+
+    public User getUserLoggedObj(){
+        Gson gson = new Gson();
+        return gson.fromJson(getPrefs().getString("ul-obj",null), User.class);
+    }
+
+    public void updatePrefs(User user){
+
+        Log.w(TAG,"updatePrefs(User user)");
+
+        getSession().setLogin(true);
+        getEditorPref().putBoolean("ul", true); // Storing boolean - true/false
+
+        Gson gson = new Gson();
+        String jsonUserLogged = gson.toJson(user);
+
+        getEditorPref().putString("ul-obj", jsonUserLogged); // Storing string
+        getEditorPref().commit(); // commit changes
     }
 
 }

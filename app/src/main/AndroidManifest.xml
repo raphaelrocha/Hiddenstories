@@ -124,7 +124,9 @@
             android:label="@string/title_activity_album"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PhotoActivity" />
-        <activity android:name=".AdjustActivity"></activity>
+        <activity android:name=".AdjustActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

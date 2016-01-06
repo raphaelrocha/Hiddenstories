@@ -25,6 +25,7 @@ import com.ufam.hiddenstories.interfaces.RecyclerViewOnClickListenerHack;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.tools.DataUrl;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -141,6 +142,17 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         myViewHolder.tvPlaceCity.setText(mList.get(position).getDistrict().getCity().getName() + "/" + mList.get(position).getDistrict().getName());
         myViewHolder.tvPlaceName.setText(mList.get(position).getName());
 
+        if(mList.get(position).getDistance()!=null){
+            Double distace = Double.parseDouble(mList.get(position).getDistance());
+
+            String value = new DecimalFormat("#.##").format(distace);
+
+            value = value+" Km";
+            myViewHolder.tvPlaceDistance.setText(value);
+        }
+        myViewHolder.tvPlaceDistance.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
@@ -170,6 +182,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         public SimpleDraweeView ivPlace;
         public TextView tvPlaceName;
         public TextView tvPlaceCity;
+        public TextView tvPlaceDistance;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -177,6 +190,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
             ivPlace = (SimpleDraweeView) itemView.findViewById(R.id.iv_place);
             tvPlaceName = (TextView) itemView.findViewById(R.id.tv_place_name);
             tvPlaceCity = (TextView) itemView.findViewById(R.id.tv_place_city);
+            tvPlaceDistance = (TextView) itemView.findViewById(R.id.tv_place_distance);
 
             itemView.setOnClickListener(this);
         }

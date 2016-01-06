@@ -56,7 +56,6 @@ public class RatingListActivity extends BaseActivity implements CustomVolleyCall
         mPlace = getIntent().getParcelableExtra("place");
         mRating = getIntent().getParcelableExtra("rating");
 
-
         mFrag = (RatingListFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");
         if(mFrag == null) {
             mFrag = new RatingListFragment();
@@ -133,9 +132,8 @@ public class RatingListActivity extends BaseActivity implements CustomVolleyCall
             public void onClick(View v) {
                 //ratingBar.getRating();
                 Log.i("RANK DIALOG","CLICK");
-                User user = getUserFromPrefers();
-                mRating.setIdUser(user.getId());
-                mRating.setIdPlace(mPlace.getId());
+                User user = getUserLoggedObj();
+                mRating.setUser(user);
                 mRating.setValue(Integer.toString(Math.round(ratingBar.getRating())));
                 mRating.setText(comments.getText().toString().trim());
                 //EditText comments = (EditText) rankDialog.findViewById(R.id.edt_comment_rat);
@@ -150,19 +148,19 @@ public class RatingListActivity extends BaseActivity implements CustomVolleyCall
     public void setRating(Rating rating,String TAG){
 
         HashMap<String,String> params = new HashMap<String,String>();
-        params.put("id_user",rating.getIdUser());
-        params.put("id_place",rating.getIdPlace());
+        params.put("id_user",rating.getUser().getId());
+        params.put("id_place",mPlace.getId());
         params.put("value",rating.getValue());
         params.put("text",rating.getText());
 
         if(TAG.equals("set-rat")){
             Log.i("PROFESSIONAL_PROFILE","set commentary: "+params.toString());
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, Request.Method.POST, params,TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SET_RATING, Request.Method.POST,false, params,TAG);
 
         }else if(TAG.equals("update-rat")){
             Log.i("PROFESSIONAL_PROFILE", "update commentary: " + params.toString());
             //Log.i("PROFESSIONAL_PROFILE","update commentary: "+getPrefs().getString("ul-id", null) + ";~;" + getProfessional().getIdProfessional()+";~;"+Math.round(value)+";~;"+comments);
-            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, Request.Method.POST, params, TAG);
+            mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.UPDATE_RATING, Request.Method.POST,false, params, TAG);
         }
     }
 

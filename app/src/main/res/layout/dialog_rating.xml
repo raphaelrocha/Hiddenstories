@@ -39,6 +39,15 @@
             android:visibility="visible" />
 
         <TextView
+            android:id="@+id/rating_feedback"
+            android:gravity="center"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimarytext"
+            android:layout_marginLeft="4dp"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/send_rat_label"

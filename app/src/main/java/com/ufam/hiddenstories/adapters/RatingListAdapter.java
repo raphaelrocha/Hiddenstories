@@ -126,7 +126,7 @@ public class RatingListAdapter extends RecyclerView.Adapter<RatingListAdapter.My
             }
         }
 
-        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getImageUser(), w));
+        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getUser().getPictureProfile(), w));
         DraweeController dc = Fresco.newDraweeControllerBuilder()
                 .setUri( uri )
                 .setOldController( myViewHolder.ivUser.getController() )
@@ -136,7 +136,7 @@ public class RatingListAdapter extends RecyclerView.Adapter<RatingListAdapter.My
         myViewHolder.ivUser.setController(dc);
         myViewHolder.ivUser.getHierarchy().setRoundingParams(rp);
 
-        myViewHolder.tvNameUser.setText(mList.get(position).getNameUser());
+        myViewHolder.tvNameUser.setText(mList.get(position).getUser().getName());
         myViewHolder.ratingBar.setRating(Float.parseFloat(mList.get(position).getValue()));
         myViewHolder.tvText.setText(mList.get(position).getText());
         myViewHolder.tvDateTime.setText(mList.get(position).getDateTime());

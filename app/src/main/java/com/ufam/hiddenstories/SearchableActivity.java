@@ -28,6 +28,7 @@ import com.ufam.hiddenstories.fragments.PlaceListFragment;
 import com.ufam.hiddenstories.fragments.PlaceSearchListFragment;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.provider.SearchableProvider;
+import com.ufam.hiddenstories.tools.GPSTracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
     private VolleyConnection mVolleyConnection;
     private String query;
     private int mCONTA_SNACK_ALERT; //garante q seja exibido apenas um snackalert no erro.
+    private final String TAG = SearchableActivity.this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,7 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
     @Override
     public void onStop(){
         super.onStop();
-        mVolleyConnection.canceRequest();
+        mVolleyConnection.cancelRequest();
     }
 
     public void showQueryOnSearchView(){
@@ -181,53 +183,64 @@ public class SearchableActivity extends BaseActivity implements CustomVolleyCall
 
     public void callServer(String query){
 
-        showDialog("Estamos procurando pra você. Aguarde.");
+        showDialog("Estamos procurando pra você. Aguarde.",true);
+        GPSTracker gpsTracker = getGpsTracker();
+        Double lat = gpsTracker.getLatitude();
+        Double lng = gpsTracker.getLongitude();
 
+        Integer radius = getDistanceRadius();
+
+        Log.i(TAG,"callServer()");
         HashMap<String, String> params = new  HashMap<String, String> ();
+        params.put("user_latitude", lat.toString());
+        params.put("user_longitude", lng.toString());
+        params.put("radius", radius.toString());
         params.put("query", query);
 
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.FIND_PLACE, Request.Method.POST,params,null);
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.FIND_PLACE, Request.Method.POST,false,params,"FIND_PLACE");
     }
 
-    @Override
-    public void deliveryResponse(JSONArray response, String TAG) {
-        ((BaseActivity)this).hideDialog();
-        showQueryOnSearchView();
+    /*private void parseResponse(JSONObject jo){
 
-        Log.i("PLACELISTA_FRAG", response.toString());
-
+        Log.i(TAG, "parseResponse()");
         try {
-            String id = response.getJSONObject(0).getString("id");
-            if(!id.equals("not_found")){
-                mFrag.setCardView(response,null);
+            boolean b = jo.getBoolean("success");
+            if(b){
+                mFrag.setCardView(jo);
             }else{
                 if(mCONTA_SNACK_ALERT==0){
                     mCONTA_SNACK_ALERT++;
                     Log.i("SNAK", "---- Lançou o snak ----");
-                    ((BaseActivity)this).showLongSnack("Nenhum resultado encontrado.");
+                    showLongSnack("Nenhum resultado encontrado.");
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            Alert("Algo deu errado.");
         }
+    }*/
 
+    @Override
+    public void deliveryResponse(JSONArray response, String flag) {
+        hideDialog();
+        showQueryOnSearchView();
     }
 
     @Override
-    public void deliveryResponse(JSONObject response, String TAG) {
-
+    public void deliveryResponse(JSONObject response, String flag) {
+        Log.i(TAG, response.toString());
+        hideDialog();
+        showQueryOnSearchView();
+        //parseResponse(response);
+        mFrag.setCardView(response);
     }
 
     @Override
-    public void deliveryError(VolleyError error, String TAG) {
-
+    public void deliveryError(VolleyError error, String flag) {
         ((BaseActivity)this).hideDialog();
-
-        Log.i("APP", "error conn: " + error);
+        Log.i(TAG, "error conn: " + error);
         ((BaseActivity)this).Alert("Problemas com a internet.");
-
         ((BaseActivity)this).finish();
-
     }
 
     @Override

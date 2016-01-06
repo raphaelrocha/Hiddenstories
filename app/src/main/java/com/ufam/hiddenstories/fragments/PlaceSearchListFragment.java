@@ -81,16 +81,33 @@ public class PlaceSearchListFragment extends Fragment implements RecyclerViewOnC
     }
 
 
-    public void setCardView(JSONArray ja,String status){
+    public void setCardView(JSONObject jo){
+        Log.i(TAG,"setCardView()");
         ArrayList<Place> places = new ArrayList<Place>();
-        try {
-            for(int i = 0, tam = ja.length(); i < tam; i++){
-                Place place = new Place();
-                place = ((BaseActivity)getActivity()).popPlaceObj(ja.getJSONObject(i));
-                places.add(place);
-            }
-        }catch (JSONException e){}
 
+        JSONArray ja = null;
+        try {
+            boolean b = jo.getBoolean("success");
+            if(b){
+                ja = jo.getJSONArray("places");
+
+                for(int i = 0, tam = ja.length(); i < tam; i++){
+                    Place place = new Place();
+                    place = ((BaseActivity)getActivity()).popPlaceObj(ja.getJSONObject(i));
+                    places.add(place);
+                }
+            }else{
+                ((BaseActivity)getActivity()).Alert("Algo deu errado");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            ((BaseActivity)getActivity()).Alert("Algo deu errado");
+        }
+
+        if(places.size()==0){
+            ((BaseActivity)getActivity()).showLongSnack("Nenhum lugar encontrado.");
+        }
         setList(places);
     }
 

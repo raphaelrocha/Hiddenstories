@@ -3,26 +3,25 @@ package com.ufam.hiddenstories.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.ufam.hiddenstories.R;
 import com.ufam.hiddenstories.interfaces.RecyclerViewOnClickListenerHack;
-import com.ufam.hiddenstories.models.Category;
-import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.Commentary;
+import com.ufam.hiddenstories.models.Rating;
 import com.ufam.hiddenstories.tools.DataUrl;
 
 import java.util.List;
@@ -32,16 +31,18 @@ import java.util.Random;
 /**
  * Created by viniciusthiengo on 4/5/15.
  */
-public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.MyViewHolder> {
+public class CommentaryListAdapter extends RecyclerView.Adapter<CommentaryListAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Category> mList;
+    private List<Commentary> mList;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
     private float scale;
     private int width, height, roundPixels;
+    final String TAG = CommentaryListAdapter.this.getClass().getSimpleName();
 
 
-    public CategoryListAdapter(Context c, List<Category> l){
+
+    public CommentaryListAdapter(Context c, List<Commentary> l){
         mContext = c;
         mList = l;
         mLayoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,7 +60,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v;
 
-        v = mLayoutInflater.inflate(R.layout.category_item_list, viewGroup, false);
+        v = mLayoutInflater.inflate(R.layout.commentary_item_list, viewGroup, false);
 
         MyViewHolder mvh = new MyViewHolder(v);
         return mvh;
@@ -107,10 +108,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 //Log.i("LOG", "onSubmit");
             }
         };
+        */
 
         int w = 0;
-        if( myViewHolder.ivPlace.getLayoutParams().width == FrameLayout.LayoutParams.MATCH_PARENT
-            || myViewHolder.ivPlace.getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT){
+        if( myViewHolder.ivUser.getLayoutParams().width == FrameLayout.LayoutParams.MATCH_PARENT
+            || myViewHolder.ivUser.getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT){
 
             Display display = ( (Activity) mContext ).getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -124,20 +126,36 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             }
         }
 
-        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getPicturePlace(), w));
+        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getUser().getPictureProfile(), w));
         DraweeController dc = Fresco.newDraweeControllerBuilder()
                 .setUri( uri )
-                .setOldController( myViewHolder.ivPlace.getController() )
+                .setOldController( myViewHolder.ivUser.getController() )
                 .build();
 
         RoundingParams rp = RoundingParams.fromCornersRadii(roundPixels, roundPixels, 0, 0);
-        myViewHolder.ivPlace.setController(dc);
-        myViewHolder.ivPlace.getHierarchy().setRoundingParams(rp);
+        myViewHolder.ivUser.setController(dc);
+        myViewHolder.ivUser.getHierarchy().setRoundingParams(rp);
 
-        myViewHolder.tvPlaceCity.setText(mList.get(position).getCity() + "/" + mList.get(position).getDistrict());
-        myViewHolder.tvPlaceName.setText(mList.get(position).getName());*/
+        myViewHolder.tvNameUser.setText(mList.get(position).getUser().getName());
+        myViewHolder.tvText.setText(mList.get(position).getText());
+        myViewHolder.tvDateTime.setText(mList.get(position).getDateTime());
 
-        myViewHolder.tvCategoryName.setText(mList.get(position).getName());
+        final int pos = position;
+        final Commentary commentary = mList.get(pos);
+
+        final Rating rating = commentary.getRating();
+        final String value;
+
+        Log.w(TAG,""+position);
+        Log.w(TAG,mList.get(position).getUser().getName());
+
+        if(rating!=null){
+            value  = rating.getValue() + ",0";
+            myViewHolder.tvRvRating.setText(value);
+            Log.w(TAG, value);
+        }else{
+            myViewHolder.tvRvRating.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -152,8 +170,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
 
 
-    public void addListItem(Category cat, int position){
-        mList.add(cat);
+    public void addListItem(Commentary c, int position){
+        mList.add(c);
         notifyItemInserted(position);
     }
 
@@ -164,15 +182,25 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView tvCategoryName;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+        public TextView tvNameUser;
+        public TextView tvText;
+        public TextView tvDateTime;
+        public TextView tvRvRating;
+        public SimpleDraweeView ivUser;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            tvCategoryName = (TextView) itemView.findViewById(R.id.tv_category_name);
+            ivUser = (SimpleDraweeView) itemView.findViewById(R.id.iv_user);
+            tvNameUser = (TextView) itemView.findViewById(R.id.tv_name_user);
+            tvText = (TextView) itemView.findViewById(R.id.tv_text);
+            tvDateTime = (TextView) itemView.findViewById(R.id.tv_date_time);
+            tvRvRating = (TextView) itemView.findViewById(R.id.tv_rating_comment);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -182,5 +210,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             }
         }
 
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(mRecyclerViewOnClickListenerHack != null){
+                mRecyclerViewOnClickListenerHack.onLongPressClickListener(v, getPosition());
+                return true;
+            }
+            return false;
+        }
     }
 }

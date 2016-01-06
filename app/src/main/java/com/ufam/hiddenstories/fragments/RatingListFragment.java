@@ -63,7 +63,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
     public void callServer (){
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("id_place",mPlace.getId());
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_RATING_LIST, Request.Method.POST, params, "get-list-ratings");
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_RATING_LIST, Request.Method.POST,false, params, "get-list-ratings");
     }
 
     @Override
@@ -99,7 +99,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
                 Rating rating = new Rating();
-                rating = ((BaseActivity)getActivity()).popListRating(ja.getJSONObject(i));
+                rating = ((BaseActivity)getActivity()).popRatingObj(ja.getJSONObject(i));
                 ratings.add(rating);
             }
         }catch (JSONException e){
@@ -208,7 +208,7 @@ public class RatingListFragment extends Fragment implements RecyclerViewOnClickL
     @Override
     public void onStop(){
         super.onStop();
-        mVolleyConnection.canceRequest();
+        mVolleyConnection.cancelRequest();
     }
 
     @Override

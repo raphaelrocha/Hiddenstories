@@ -58,7 +58,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     }
 
     private void callServer (){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, Request.Method.GET, null, "CATEGORY_LIST");
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, Request.Method.GET,false, null, "CATEGORY_LIST");
     }
 
     @Override
@@ -199,7 +199,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     @Override
     public void onStop(){
         super.onStop();
-        mVolleyConnection.canceRequest();
+        mVolleyConnection.cancelRequest();
     }
 
     @Override

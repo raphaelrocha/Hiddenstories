@@ -10,7 +10,6 @@ import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.services.CustomJsonArrayRequest;
 import com.ufam.hiddenstories.services.CustomJsonObjectRequest;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,13 +35,13 @@ public class VolleyConnection {
         this.mVOLLEYTAG = tag;
     }
 
-    public void canceRequest(){
+    public void cancelRequest(){
         if(mVOLLEYTAG!=null){
             VolleyConnectionQueue.getINSTANCE().cancelRequest(this.mVOLLEYTAG);
         }
     }
 
-    public void callServerApiByJsonArrayRequest(final String url, int requestMethod, HashMap<String, String> data, final String TAG){
+    public void callServerApiByJsonArrayRequest(final String url, int requestMethod, boolean retyrPolicyForUpload, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
         Gson gson = new Gson();
@@ -78,21 +77,33 @@ public class VolleyConnection {
                     }
                 });
 
-        request.setTag(activityName);
-        request.setRetryPolicy(
-                new DefaultRetryPolicy(
-                        500000,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                )
-        );
+
+        if(retyrPolicyForUpload){
+            request.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            500000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                    )
+            );
+        }else{
+            request.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            5000,
+                            50,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                    )
+            );
+        }
         this.setVolleyTag(activityName);
+        request.setTag(activityName);
+        request.setShouldCache(true);
         //rq.add(request);
         VolleyConnectionQueue.getINSTANCE().addQueue(request);
     }
 
     //METODO PARA ENVIO E RECEBIMENTO DE JSONOBJECTS
-    public void callServerApiByJsonObjectRequest(final String url, int requestMethod, HashMap<String, String> data, final String TAG){
+    public void callServerApiByJsonObjectRequest(final String url, int requestMethod, boolean retyrPolicyForUpload, HashMap<String, String> data, final String TAG){
 
         params = new HashMap<String, String>();
         Gson gson = new Gson();
@@ -130,15 +141,27 @@ public class VolleyConnection {
                     }
                 });
 
-        request.setTag("tagPhotoActivity");
-        request.setRetryPolicy(
-                new DefaultRetryPolicy(
-                        500000,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                )
-        );
-        this.setVolleyTag("tagPhotoActivity");
+
+        if(retyrPolicyForUpload){
+            request.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            500000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                    )
+            );
+        }else{
+            request.setRetryPolicy(
+                    new DefaultRetryPolicy(
+                            5000,
+                            50,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                    )
+            );
+        }
+        this.setVolleyTag(activityName);
+        request.setTag(activityName);
+        request.setShouldCache(true);
         //rq.add(request);
         VolleyConnectionQueue.getINSTANCE().addQueue(request);
     }

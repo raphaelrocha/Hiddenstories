@@ -82,7 +82,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         params.put("user_longitude", lng.toString());
         params.put("radius", radius.toString());
 
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,params,"GET_PLACE_BY_CAT");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,false,params,"GET_PLACE_BY_CAT");
     }
 
     @Override
@@ -119,19 +119,19 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
     public void setCardView(JSONObject jo){
         Log.i(TAG,"setCardView()");
+        ArrayList<Place> places = new ArrayList<Place>();
 
         JSONArray ja = null;
         try {
             boolean b = jo.getBoolean("success");
             if(b){
                 ja = jo.getJSONArray("places");
-                ArrayList<Place> places = new ArrayList<Place>();
+
                 for(int i = 0, tam = ja.length(); i < tam; i++){
                     Place place = new Place();
                     place = ((BaseActivity)getActivity()).popPlaceObj(ja.getJSONObject(i));
                     places.add(place);
                 }
-                setList(places);
             }else{
                 ((BaseActivity)getActivity()).Alert("Algo deu errado");
             }
@@ -141,7 +141,10 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
             ((BaseActivity)getActivity()).Alert("Algo deu errado");
         }
 
-
+        if(places.size()==0){
+            ((BaseActivity)getActivity()).showLongSnack("Ainda não existem lugares cadastrados. Seja o primeiro a cadastrar!");
+        }
+        setList(places);
     }
 
     //public void setCategory(Category c){
@@ -188,7 +191,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     public void onStop(){
         super.onStop();
         Log.i(TAG,"onStop()");
-        mVolleyConnection.canceRequest();
+        mVolleyConnection.cancelRequest();
     }
 
 

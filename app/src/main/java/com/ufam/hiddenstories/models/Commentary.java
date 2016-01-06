@@ -6,14 +6,22 @@ import android.os.Parcelable;
 /**
  * Created by rli on 28/11/2015.
  */
-public class Rating implements Parcelable {
+public class Commentary implements Parcelable {
 
     private String id;
     private User user;
     private Place place;
-    private String value;
     private String text;
     private String dateTime;
+    private Rating rating;
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
 
     public String getId() {
         return id;
@@ -39,14 +47,6 @@ public class Rating implements Parcelable {
         this.place = place;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getText() {
         return text;
     }
@@ -63,7 +63,7 @@ public class Rating implements Parcelable {
         this.dateTime = dateTime;
     }
 
-    public Rating(){
+    public Commentary(){
     }
 
     @Override
@@ -74,30 +74,30 @@ public class Rating implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString( getId() );
-        dest.writeString( getValue() );
         dest.writeString(getText());
         dest.writeString(getDateTime());
         dest.writeParcelable( getUser() ,flags);
         dest.writeParcelable( getPlace() ,flags);
+        dest.writeParcelable( getRating() ,flags);
     }
 
-    public Rating(Parcel parcel){
+    public Commentary(Parcel parcel){
         setId(parcel.readString());
-        setValue(parcel.readString());
         setText(parcel.readString());
         setDateTime(parcel.readString());
         setUser((User) parcel.readParcelable(User.class.getClassLoader()));
         setPlace((Place) parcel.readParcelable(Place.class.getClassLoader()));
+        setRating((Rating) parcel.readParcelable(Rating.class.getClassLoader()));
     }
 
-    public static final Parcelable.Creator<Rating> CREATOR = new Parcelable.Creator<Rating>(){
+    public static final Creator<Commentary> CREATOR = new Creator<Commentary>(){
         @Override
-        public Rating createFromParcel(Parcel source) {
-            return new Rating(source);
+        public Commentary createFromParcel(Parcel source) {
+            return new Commentary(source);
         }
         @Override
-        public Rating[] newArray(int size) {
-            return new Rating[size];
+        public Commentary[] newArray(int size) {
+            return new Commentary[size];
         }
     };
 }

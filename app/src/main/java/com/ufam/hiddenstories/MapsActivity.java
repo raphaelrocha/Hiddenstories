@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,6 +27,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ufam.hiddenstories.conn.ServerInfo;
+import com.ufam.hiddenstories.conn.VolleyConnection;
+import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.tools.GMapV2Direction;
 
@@ -34,6 +39,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
@@ -45,23 +52,25 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, CustomVolleyCallbackInterface {
 
     private GoogleMap mMap;
     private Place mPlace;
     private GoogleApiClient mGoogleApiClient;
-    private String mode;
+    private String mMode;
     private Toolbar mLocalToolbar;
+    private VolleyConnection mVolleyConnection;
+    final String TAG = MapsActivity.this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-
+        mVolleyConnection = new VolleyConnection(this);
 
         mPlace = getIntent().getParcelableExtra("place");
-        mode = "one";
+        mMode = getIntent().getStringExtra("mode");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -71,6 +80,34 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         mLocalToolbar = setUpToolbar("Mapa",true,false);
         AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_maps);
         appbar.bringToFront();
+    }
+
+    private void callServer(){
+        Integer radius_distance = getDistanceRadius();
+        showDialog("Buscando profissionais que estejam até "+radius_distance+" Km de onve você está.",true);
+
+        Location l = LocationServices
+                .FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        Double user_lat = null;
+        Double user_lng = null;
+        String radius = radius_distance.toString();
+        if(l != null){
+            user_lat = l.getLatitude();
+            user_lng = l.getLongitude();
+        }else{
+            user_lat = -3.088281;//temp ufam
+            user_lng = -59.964379;//temp ufam
+        }
+
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("user_latitude",user_lat.toString());
+        params.put("user_longitude",user_lng.toString());
+        params.put("radius",radius);
+
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_ALL_PLACE, Request.Method.POST, false,  params, "GET_ALL_PLACE");
+        //mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.actionGetAllPro, Request.Method.POST, false,  params, "ACTION_GET_LIST_PRO_BY_PROXIMITY");
     }
 
 
@@ -154,16 +191,17 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             route(myLocation, placeLocation,
                     GMapV2Direction.MODE_DRIVING);
         }
-
     }
-
 
     @Override
     public void onConnected(Bundle bundle) {
 
-        if(mode.equals("one")){
+        if(mMode.equals("one")){
             startMapOne();
+        }else if(mMode.equals("many")){
+            callServer();
         }
+
     }
 
     @Override
@@ -200,6 +238,136 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         new GMapV2DirectionAsyncTask(handler, sourcePosition, destPosition, GMapV2Direction.MODE_DRIVING).execute();
     }
 
+    private void showDeviceLocation(boolean b){
+
+        Location l = LocationServices
+                .FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        MarkerOptions options = new MarkerOptions();
+
+        //mostra a localização do device.
+        Double user_lat;
+        Double user_lng;
+        if(l != null){
+            user_lat = l.getLatitude();
+            user_lng = l.getLongitude();
+        }else{
+            user_lat = -3.088281;//temp ufam
+            user_lng = -59.964379;//temp ufam
+        }
+
+        //LatLng myLocation = new LatLng(l.getLatitude(), l.getLongitude());
+        LatLng myLocation = new LatLng(user_lat, user_lng);
+        options = new MarkerOptions();
+        options.position(myLocation).title("Você está aqui.").draggable(true);
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
+        //mMap.addMarker(new MarkerOptions().position(myLocation).title("Você está aqui."));
+        Marker mMarkerPlace = mMap.addMarker(options);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+        //coloca o zoom no usuário
+        if(b){
+            //LatLng placeLocation = new LatLng(l.getLatitude(), l.getLongitude());
+            //Marker mMarkerPlace = mMap.addMarker(new MarkerOptions().position(placeLocation).title(professional.getName()).snippet(professional.getAddr()));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(myLocation).zoom(16).bearing(0).tilt(0).build();
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(cameraPosition);
+
+            mMap.animateCamera(update, 3000, new GoogleMap.CancelableCallback() {
+                @Override
+                public void onCancel() {
+                    Log.i("Script", "CancelableCallback.onCancel()");
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.i("Script", "CancelableCallback.onFinish()");
+                }
+            });
+
+            mMarkerPlace.showInfoWindow();
+        }
+
+    }
+
+
+    private void startMapMany(JSONObject jo){
+
+        JSONArray ja = null;
+        try {
+            boolean b = jo.getBoolean("success");
+            if(b){
+                ja = jo.getJSONArray("places");
+                ArrayList<Place> places = new ArrayList<Place>();
+                for(int i = 0, tam = ja.length(); i < tam; i++){
+                    Place place = new Place();
+                    place = popPlaceObj(ja.getJSONObject(i));
+                    places.add(place);
+                }
+
+                showDeviceLocation(true);
+
+                for(int i=0;i<places.size();i++){
+
+                    //String[] parts = professionals.get(i).getProfessional().getLocation().split(";");
+
+                    try{
+                        Double lat = Double.parseDouble(places.get(i).getLatitude());
+                        Double lng = Double.parseDouble(places.get(i).getLongitude());
+
+                        customAddMarker(new LatLng(lat, lng), places.get(i).getName(), places.get(i).getAddr() + ", " + places.get(i).getDistrict().getName(),"everybody");
+
+                    }catch(Exception e){
+                        //Log.i("MAP ERROR",parts.toString());
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }else{
+                Alert("Algo deu errado");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Alert("Algo deu errado");
+        }
+    }
+
+    private void customAddMarker(LatLng latLng, String title, String snippet,String me){
+        Log.i("APP", "customAddMarker");
+        MarkerOptions options = new MarkerOptions();
+        options.position(latLng).title(title).snippet(snippet).draggable(true);
+        /*if(me.equals("me")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
+        }*/
+
+        Marker marker = mMap.addMarker(options);
+        marker.showInfoWindow();
+        /*if(mMode.equals("one")){
+            mMarker.showInfoWindow();
+        }if(me.equals("me")){
+            mMarker.showInfoWindow();
+        }*/
+    }
+
+    @Override
+    public void deliveryResponse(JSONArray response, String flag) {
+        hideDialog();
+    }
+
+    @Override
+    public void deliveryResponse(JSONObject response, String flag) {
+        hideDialog();
+        Log.i(TAG,"deliveryResponse(Object)");
+        Log.i(TAG, response.toString());
+        startMapMany(response);
+    }
+
+    @Override
+    public void deliveryError(VolleyError error, String flag) {
+        hideDialog();
+    }
 
 
     public class GMapV2DirectionAsyncTask extends AsyncTask<String, Void, Document> {

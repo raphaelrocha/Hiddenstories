@@ -82,7 +82,7 @@ public class CategoryListActivity extends BaseActivity {
             ft.commit();
         }
 
-        userLogged = getUserFromPrefers();
+        userLogged = getUserLoggedObj();
 
         //LIB PARA CARREGAR A FOTO DO DRAWER
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
@@ -217,16 +217,22 @@ public class CategoryListActivity extends BaseActivity {
                         //for (int count = 0, tam = navigationDrawerLeft.getDrawerItems().size(); count < tam; count++) {
                             //if (count == mPositionClicked && mPositionClicked <= 6) {
                                 if (position == 1) {
+                                    //MAPA
+                                    Intent myIntent = new Intent(CategoryListActivity.this, MapsActivity.class);
+                                    myIntent.putExtra("mode", "many");
+                                    startActivityForResult(myIntent, 0);
+                                }
+                                else  if (position == 2) {
                                     //AJSUTES
                                     //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
                                     Intent myIntent = new Intent(CategoryListActivity.this, AdjustActivity.class);
                                     startActivityForResult(myIntent, 0);
                                 }
-                                else if (position == 2) {
+                                else if (position == 3) {
                                     //SAIR
                                     //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
                                     logoutUser();
-                                } else if (position == 3) {
+                                } else if (position == 4) {
                                     //SAIR
                                     //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
                                     clearSearchHistory();
@@ -271,6 +277,7 @@ public class CategoryListActivity extends BaseActivity {
         //navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName(R.string.drawer_favorites).withIcon(getResources().getDrawable(R.drawable.star)));
         //navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName(R.string.drawer_find_in_map).withIcon(getResources().getDrawable(R.drawable.map)));
         //navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName(R.string.drawer_popular).withIcon(getResources().getDrawable(R.drawable.magnify_plus)));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName(R.string.drawer_find_in_map).withIcon(getResources().getDrawable(R.drawable.map)));
         //navigationDrawerLeft.addItem(new DividerDrawerItem());
         //navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_configuration).withIcon(getResources().getDrawable(R.drawable.settings)));
         //navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_configuration).withIcon(getResources().getDrawable(R.drawable.settings)));

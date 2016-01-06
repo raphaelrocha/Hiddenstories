@@ -22,9 +22,9 @@ public interface CustomVolleyCallbackInterface {
     */
 
     //TRATA RESPOSTAS DE SUCESSO
-    public void deliveryResponse(JSONArray response, String TAG);
-    public void deliveryResponse(JSONObject response, String TAG);
+    public void deliveryResponse(JSONArray response, String flag);
+    public void deliveryResponse(JSONObject response, String flag);
 
     //TRATA RESPOSTAS DE ERRO
-    public void deliveryError(VolleyError error, String TAG);
+    public void deliveryError(VolleyError error, String flag);
 }

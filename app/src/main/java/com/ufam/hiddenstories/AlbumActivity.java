@@ -101,18 +101,18 @@ public class AlbumActivity extends BaseActivity implements RecyclerViewOnClickLi
     private void callServer(){
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_place",mPlace.getId());
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.LIST_PICTURE_BY_PLACE, Request.Method.POST,params,"LIST_PICTURE_BY_PLACE");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.LIST_PICTURE_BY_PLACE, Request.Method.POST, false,params,"LIST_PICTURE_BY_PLACE");
     }
 
     private void sendImage(){
-        showDialog("Enviando sua foto.");
+        showDialog("Enviando sua foto.",false);
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("id_place",mPlace.getId());
         params.put("place_name",mPlace.getName());
         params.put("text",mTEXT);
         params.put("file_string",mIMAGE_TO_SAVE);
         params.put("ext",ServerInfo.EXTENSION_IMAGE_FILE);
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SEND_PICTURE, Request.Method.POST,params,"SEND_PICTURE");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SEND_PICTURE, Request.Method.POST,false, params,"SEND_PICTURE");
     }
 
     public void setList(ArrayList<Picture> p){

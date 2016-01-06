@@ -155,9 +155,9 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
         params.put("picture", image);
         params.put("ext", ext);
 
-        showDialog("Salvando...");
+        showDialog("Salvando...",false);
 
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.CREATE_PLACE, Request.Method.POST, params, "ACTION_CREATE_PLACE");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.CREATE_PLACE, Request.Method.POST, false,params, "ACTION_CREATE_PLACE");
     }
 
     public void startCrop(){
@@ -232,7 +232,7 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
 
     private synchronized void getAndroidLocation(){
         Log.i("UPDATE_PROFILE", "getAndroidLocation()");
-        showDialog("Buscando sua localização. Aguarde.");
+        showDialog("Buscando sua localização. Aguarde.",true);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
@@ -334,7 +334,7 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
     @Override
     public void onStop(){
         super.onStop();
-        mVolleyConnection.canceRequest();
+        mVolleyConnection.cancelRequest();
     }
 
 

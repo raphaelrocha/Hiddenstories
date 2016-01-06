@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
@@ -30,6 +31,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements CustomVolleyCallbackInterface {
+
+    private final String TAG = MainActivity.this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +68,9 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         });
 
         if (getSession().isLoggedIn()) {
-            Log.i("LOGIN_ACTIVITY","Já está logado.");
-
-            showDialog("Aguarde.");
-            Log.i("ID: ", getPrefs().getString("ul-id", null));
-            startApp(getUserFromPrefers());
+            Log.i(TAG,"Já está logado.");
+            showDialog("Aguarde.",false);
+            startApp(getUserLoggedObj());
         }
     }
 
@@ -78,7 +79,7 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         params.put("user",user);
         params.put("passwd",passwd);
         VolleyConnection conn = new VolleyConnection(this);
-        conn.callServerApiByJsonArrayRequest(ServerInfo.LOGIN, Request.Method.POST,params,"LOGIN");
+        conn.callServerApiByJsonObjectRequest(ServerInfo.LOGIN, Request.Method.POST,false, params,"LOGIN");
     }
 
     private void newUser(){
@@ -86,23 +87,30 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         startActivityForResult(intent,0);
     }
 
-    private void savePrefers(JSONArray ja){
+    private void savePrefers(JSONObject jo){
         hideKeyboard();
-        JSONObject jo;
+
         try {
-            jo = ja.getJSONObject(0);
-            User user = popUser(jo);
+            boolean b = jo.getBoolean("success");
+            if(b){
+                User u = popUser(jo.getJSONObject("user"));
 
-            getSession().setLogin(true);
-            getEditorPref().putBoolean("ul", true); // Storing boolean - true/false
-            getEditorPref().putString("ul-id", user.getId()); // Storing string
-            getEditorPref().putString("ul-name", user.getName()); // Storing string
-            getEditorPref().putString("ul-email", user.getEmail()); // Storing string
-            getEditorPref().putString("ul-picture_profile", user.getPictureProfile()); // Storing string
-            getEditorPref().commit();
+                getSession().setLogin(true);
+                getEditorPref().putBoolean("ul", true); // Storing boolean - true/false
 
-            startApp(user);
+                Gson gson = new Gson();
+                String jsonUserLogged = gson.toJson(u);
 
+                getEditorPref().putString("ul-obj", jsonUserLogged); // Storing string
+
+                getEditorPref().commit(); // commit changes
+                hideDialog();
+
+                getEditorPref().commit();
+                startApp(u);
+            }else{
+                Alert("Erro no login ou senha.");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Alert("Algo deu errado. Tente novamente.");
@@ -187,13 +195,12 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
     @Override
     public void deliveryResponse(JSONArray response, String TAG) {
 
-        savePrefers(response);
-
     }
 
     @Override
     public void deliveryResponse(JSONObject response, String TAG) {
-
+        hideDialog();
+        savePrefers(response);
     }
 
     @Override

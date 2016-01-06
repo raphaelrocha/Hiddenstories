@@ -37,8 +37,78 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <LinearLayout
+                    <View
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/vw_divider_detail"
                         android:layout_below="@+id/place_tv_city"
+                        android:background="@color/colorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp" />
+
+                    <TextView
+                        android:text="0,0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/reputation_average_pro"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:textSize="28sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/vw_divider_detail"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"/>
+
+                    <RatingBar
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:id="@+id/ratbar_pro_reputation"
+                        android:layout_gravity="center"
+                        android:numStars="5"
+                        android:stepSize="0.1"
+                        android:rating="0"
+                        android:isIndicator="true"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:layout_below="@+id/reputation_average_pro"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"/>
+
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/people_grey"
+                        android:id="@+id/iv_peoples_icon"
+
+                        android:layout_below="@+id/ratbar_pro_reputation"
+                        android:layout_toLeftOf="@+id/reputation_average_pro"
+                        android:layout_toStartOf="@+id/reputation_average_pro" />
+
+                    <TextView
+                        android:text="0 Avaliaram"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="20dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/colorSecond"
+                        android:layout_alignBottom="@+id/iv_peoples_icon"
+                        android:layout_toRightOf="@+id/iv_peoples_icon"
+                        android:layout_toEndOf="@+id/iv_peoples_icon"
+                        android:id="@+id/tv_total_rating"
+                        android:layout_marginLeft="4dp"
+                        android:layout_below="@+id/ratbar_pro_reputation" />
+                    <View
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/vw_divider2_detail"
+                        android:layout_below="@+id/tv_total_rating"
+                        android:background="@color/colorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp" />
+                    <LinearLayout
+                        android:layout_below="@+id/vw_divider2_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/place_ll_tv_description"

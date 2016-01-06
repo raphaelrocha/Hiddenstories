@@ -29,6 +29,15 @@ public class ServerInfo {
     public static final String  CREATE_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/create";
     public static final String  LIST_PICTURE_BY_PLACE = SERVER_ADDR + SERVER_FOLDER + "/picture/getbyplace";
     public static final String  SEND_PICTURE = SERVER_ADDR + SERVER_FOLDER + "/picture/send";
+    public static final String  GET_ALL_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/getall";
+    public static final String  GET_COMMENTARY_LIST = SERVER_ADDR + SERVER_FOLDER + "/commentary/getallbyplace";
+    public static final String  ACTION_SET_COMMENTARY = SERVER_ADDR + SERVER_FOLDER + "/commentary/set";
+    public static final String  ACTION_DELETE_COMMENTARY = SERVER_ADDR + SERVER_FOLDER + "/commentary/delete";
+
+
+
+
+
 
     //IMAGE FOLDER
     //public static final String imageFolder = "http://192.168.56.1/quebragalho/images/__w-200-400-600-800-1000__/";

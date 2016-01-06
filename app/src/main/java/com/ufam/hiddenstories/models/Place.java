@@ -3,6 +3,8 @@ package com.ufam.hiddenstories.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by rli on 12/11/2015.
  */
@@ -18,6 +20,24 @@ public class Place implements Parcelable {
     private String longitude;
     private String picturePlace;
     private String dateTime;
+    private String distance;
+    private ArrayList<Rating> ratings;
+
+    public ArrayList<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(ArrayList<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public String getId() {
         return id;
@@ -116,8 +136,11 @@ public class Place implements Parcelable {
         dest.writeString(getLatitude());
         dest.writeString( getPicturePlace() );
         dest.writeString( getLongitude() );
+        dest.writeString( getDateTime() );
+        dest.writeString( getDistance() );
         dest.writeParcelable( getDistrict() ,flags);
         dest.writeParcelable( getCategory() ,flags);
+        dest.writeList(getRatings());
     }
 
     public Place(Parcel parcel){
@@ -128,8 +151,11 @@ public class Place implements Parcelable {
         setLatitude(parcel.readString());
         setPicturePlace(parcel.readString());
         setLongitude(parcel.readString());
+        setDateTime(parcel.readString());
+        setDistance(parcel.readString());
         setDistrict((District) parcel.readParcelable(District.class.getClassLoader()));
         setCategory((Category) parcel.readParcelable(Category.class.getClassLoader()));
+        setRatings(parcel.readArrayList(Rating.class.getClassLoader()));
     }
 
     public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>(){
