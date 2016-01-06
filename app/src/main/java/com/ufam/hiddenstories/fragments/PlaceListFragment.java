@@ -46,18 +46,18 @@ import java.util.Map;
 
 
 public class PlaceListFragment extends Fragment implements RecyclerViewOnClickListenerHack, View.OnClickListener, CustomVolleyCallbackInterface {
-    protected static final String TAG = "LOG";
     protected RecyclerView mRecyclerView;
     protected List<Place> mList;
     protected android.support.design.widget.FloatingActionButton fab;
     protected VolleyConnection mVolleyConnection;
     private Category mCategory;
+    final String TAG = PlaceListFragment.this.getClass().getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i("PLACELISTFRAG","onCreate()");
+        Log.i(TAG,"onCreate()");
 
         mVolleyConnection = new VolleyConnection(this);
 
@@ -75,14 +75,14 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
         Integer radius = ((BaseActivity)getActivity()).getDistanceRadius();
 
-        Log.i("PLACELISTFRAG","callServer()"+ mCategory.getId());
+        Log.i(TAG,"callServer()"+ mCategory.getId());
         HashMap<String, String> params = new  HashMap<String, String> ();
         params.put("id_cat", mCategory.getId());
-        params.put("lat", lat.toString());
-        params.put("lng", lng.toString());
+        params.put("user_latitude", lat.toString());
+        params.put("user_longitude", lng.toString());
         params.put("radius", radius.toString());
 
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,params,null);
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,params,"GET_PLACE_BY_CAT");
     }
 
     @Override
@@ -117,18 +117,31 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
 
-    public void setCardView(JSONArray ja,String status){
-        Log.i("PLACELISTFRAG","setCardView()");
-        ArrayList<Place> places = new ArrayList<Place>();
-        try {
-            for(int i = 0, tam = ja.length(); i < tam; i++){
-                Place place = new Place();
-                place = ((BaseActivity)getActivity()).popListPlaces(ja.getJSONObject(i));
-                places.add(place);
-            }
-        }catch (JSONException e){}
+    public void setCardView(JSONObject jo){
+        Log.i(TAG,"setCardView()");
 
-        setList(places);
+        JSONArray ja = null;
+        try {
+            boolean b = jo.getBoolean("success");
+            if(b){
+                ja = jo.getJSONArray("places");
+                ArrayList<Place> places = new ArrayList<Place>();
+                for(int i = 0, tam = ja.length(); i < tam; i++){
+                    Place place = new Place();
+                    place = ((BaseActivity)getActivity()).popPlaceObj(ja.getJSONObject(i));
+                    places.add(place);
+                }
+                setList(places);
+            }else{
+                ((BaseActivity)getActivity()).Alert("Algo deu errado");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            ((BaseActivity)getActivity()).Alert("Algo deu errado");
+        }
+
+
     }
 
     //public void setCategory(Category c){
@@ -137,7 +150,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClickListener(View view, int position) {
-        Log.i("PLACELISTFRAG","onClickListener()");
+        Log.i(TAG,"onClickListener()");
 
         Intent intent = new Intent(getActivity(), PlaceActivity.class);
         intent.putExtra("place", mList.get(position));
@@ -147,44 +160,34 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
     @Override
     public void onLongPressClickListener(View view, int position) {
-        Log.i("PLACELISTFRAG","onLongPressClickListener()");
+        Log.i(TAG,"onLongPressClickListener()");
         Toast.makeText(getActivity(), "onLongPressClickListener(): " + position, Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
-    public void deliveryResponse(JSONArray response, String TAG) {
-        Log.i("PLACELISTFRAG","deliveryResponse(Array)");
-        Log.i("PLACELISTA_FRAG", response.toString());
-
-        try {
-            String id = response.getJSONObject(0).getString("id");
-            if(!id.equals("not_found")){
-                setCardView(response,null);
-            }else{
-                ((BaseActivity)getActivity()).showLongSnack("Nenhum lugar encontrado.");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void deliveryResponse(JSONArray response, String flag) {
+        Log.i(TAG,"deliveryResponse(Array)");
 
     }
 
     @Override
-    public void deliveryResponse(JSONObject response, String TAG) {
-        Log.i("PLACELISTFRAG","deliveryResponse(Object)");
+    public void deliveryResponse(JSONObject response, String flag) {
+        Log.i(TAG,"deliveryResponse(Object)");
+        Log.i(TAG, response.toString());
+        setCardView(response);
 
     }
 
     @Override
-    public void deliveryError(VolleyError error, String TAG) {
-        Log.i("PLACELISTFRAG","deliveryError()");
+    public void deliveryError(VolleyError error, String flag) {
+        Log.i(TAG,"deliveryError()");
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        Log.i("PLACELISTFRAG","onStop()");
+        Log.i(TAG,"onStop()");
         mVolleyConnection.canceRequest();
     }
 
@@ -242,7 +245,7 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     @Override
     public void onClick(View v) {
 
-        Log.i("PLACELISTFRAG","onClick()");
+        Log.i(TAG,"onClick()");
         String aux = "";
 
 

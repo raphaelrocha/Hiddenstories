@@ -4,20 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by rli on 19/11/2015.
+ * Created by rli on 05/01/2016.
  */
-public class Category implements  Parcelable{
+public class City implements Parcelable{
     private String id;
     private String name;
-    private String picture;
     private String dateTime;
+    private State state;
 
-    public String getDateTime() {
-        return dateTime;
+    public State getState() {
+        return state;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setState(State state) {
+        this.state = state;
     }
 
     public String getId() {
@@ -36,15 +36,15 @@ public class Category implements  Parcelable{
         this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public Category(){}
+    public City(){}
 
     @Override
     public int describeContents() {
@@ -53,27 +53,28 @@ public class Category implements  Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeString( getId() );
         dest.writeString( getName() );
-        dest.writeString( getPicture() );
         dest.writeString( getDateTime() );
+        dest.writeParcelable( getState() ,flags);
     }
 
-    public Category(Parcel parcel){
+    public City(Parcel parcel){
         setId(parcel.readString());
         setName(parcel.readString());
-        setPicture(parcel.readString());
         setDateTime(parcel.readString());
+        setState((State) parcel.readParcelable(State.class.getClassLoader()));
     }
 
-    public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>(){
+    public static final Creator<City> CREATOR = new Creator<City>(){
         @Override
-        public Category createFromParcel(Parcel source) {
-            return new Category(source);
+        public City createFromParcel(Parcel source) {
+            return new City(source);
         }
         @Override
-        public Category[] newArray(int size) {
-            return new Category[size];
+        public City[] newArray(int size) {
+            return new City[size];
         }
     };
 }

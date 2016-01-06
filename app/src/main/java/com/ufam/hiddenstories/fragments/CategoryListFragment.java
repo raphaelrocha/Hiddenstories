@@ -43,6 +43,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     protected RecyclerView mRecyclerView;
     private List<Category> mList;
     private VolleyConnection mVolleyConnection;
+    final String TAG = CategoryListFragment.this.getClass().getSimpleName();
 
 
     @Override
@@ -57,7 +58,7 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     }
 
     private void callServer (){
-        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, Request.Method.GET, null, null);
+        mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.CATEGORY_LIST, Request.Method.GET, null, "CATEGORY_LIST");
     }
 
     @Override
@@ -92,12 +93,12 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
     }
 
 
-    public void setCardView(JSONArray ja,String status){
+    public void setCardView(JSONArray ja){
         ArrayList<Category> categories = new ArrayList<Category>();
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
                 Category category = new Category();
-                category = ((BaseActivity)getActivity()).popListCategory(ja.getJSONObject(i));
+                category = ((BaseActivity)getActivity()).popCategoryObj(ja.getJSONObject(i));
                 categories.add(category);
             }
         }catch (JSONException e){}
@@ -114,24 +115,21 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
         intent.putExtra("category", mList.get(position));
         getActivity().startActivity(intent);
 
-
     }
-
 
     @Override
     public void deliveryResponse(JSONArray response, String TAG) {
-        Log.i("CATEGORY_LIST_FRAG", "SUCESS: "+response.toString());
-        setCardView(response,null);
+        Log.i(TAG, "SUCESS: "+response.toString());
+        setCardView(response);
     }
 
     @Override
     public void deliveryResponse(JSONObject response, String TAG) {
-
     }
 
     @Override
     public void deliveryError(VolleyError error, String TAG) {
-        Log.i("CATEGORY_LIST_FRAG", "ERROR: "+error );
+        Log.i(TAG, "ERROR: "+error );
     }
 
     @Override

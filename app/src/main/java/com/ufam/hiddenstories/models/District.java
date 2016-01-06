@@ -4,20 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by rli on 19/11/2015.
+ * Created by rli on 05/01/2016.
  */
-public class Category implements  Parcelable{
+public class District implements Parcelable{
     private String id;
     private String name;
-    private String picture;
     private String dateTime;
+    private City city;
 
-    public String getDateTime() {
-        return dateTime;
+    public City getCity() {
+        return city;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getId() {
@@ -36,15 +36,15 @@ public class Category implements  Parcelable{
         this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public Category(){}
+    public District(){}
 
     @Override
     public int describeContents() {
@@ -53,27 +53,28 @@ public class Category implements  Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeString( getId() );
         dest.writeString( getName() );
-        dest.writeString( getPicture() );
         dest.writeString( getDateTime() );
+        dest.writeParcelable( getCity() ,flags);
     }
 
-    public Category(Parcel parcel){
+    public District(Parcel parcel){
         setId(parcel.readString());
         setName(parcel.readString());
-        setPicture(parcel.readString());
         setDateTime(parcel.readString());
+        setCity((City) parcel.readParcelable(City.class.getClassLoader()));
     }
 
-    public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>(){
+    public static final Creator<District> CREATOR = new Creator<District>(){
         @Override
-        public Category createFromParcel(Parcel source) {
-            return new Category(source);
+        public District createFromParcel(Parcel source) {
+            return new District(source);
         }
         @Override
-        public Category[] newArray(int size) {
-            return new Category[size];
+        public District[] newArray(int size) {
+            return new District[size];
         }
     };
 }

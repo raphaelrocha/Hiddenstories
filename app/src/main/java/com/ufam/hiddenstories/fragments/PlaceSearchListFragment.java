@@ -86,7 +86,7 @@ public class PlaceSearchListFragment extends Fragment implements RecyclerViewOnC
         try {
             for(int i = 0, tam = ja.length(); i < tam; i++){
                 Place place = new Place();
-                place = ((BaseActivity)getActivity()).popListPlaces(ja.getJSONObject(i));
+                place = ((BaseActivity)getActivity()).popPlaceObj(ja.getJSONObject(i));
                 places.add(place);
             }
         }catch (JSONException e){}

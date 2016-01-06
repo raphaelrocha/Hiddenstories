@@ -138,7 +138,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.MyVi
         myViewHolder.ivPlace.setController(dc);
         myViewHolder.ivPlace.getHierarchy().setRoundingParams(rp);
 
-        myViewHolder.tvPlaceCity.setText(mList.get(position).getCity() + "/" + mList.get(position).getDistrict());
+        myViewHolder.tvPlaceCity.setText(mList.get(position).getDistrict().getCity().getName() + "/" + mList.get(position).getDistrict().getName());
         myViewHolder.tvPlaceName.setText(mList.get(position).getName());
 
     }

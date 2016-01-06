@@ -222,7 +222,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         //tvPlaceCity.setText(getResources().getString(R.string.tmp_place_city));//texto temporario com o nome da cidade
 
         tvPlaceName.setText(mPlace.getName());//texto temporario com o nome do local
-        String cityDistrict = mPlace.getCity()+"/"+mPlace.getDistrict();
+        String cityDistrict = mPlace.getDistrict().getCity().getName()+"/"+mPlace.getDistrict().getName();
         tvPlaceCity.setText(cityDistrict);//texto temporario com o nome da cidade
 
         tvPlaceName.setTypeface(null, Typeface.BOLD);

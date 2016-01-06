@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,9 +25,13 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
 import com.ufam.hiddenstories.models.Category;
+import com.ufam.hiddenstories.models.City;
+import com.ufam.hiddenstories.models.Country;
+import com.ufam.hiddenstories.models.District;
 import com.ufam.hiddenstories.models.Picture;
 import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.models.Rating;
+import com.ufam.hiddenstories.models.State;
 import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.provider.SearchableProvider;
 import com.ufam.hiddenstories.tools.GPSTracker;
@@ -46,6 +51,13 @@ public class BaseActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     final String TAG = BaseActivity.this.getClass().getSimpleName();
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        Log.i(TAG, "install");
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +83,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public Category popListCategory(JSONObject jo){
-        Category category = new Category();
-
-        try {
-            category.setId(jo.getString("id"));
-            category.setName(jo.getString("name"));
-            category.setPicture(ServerInfo.IMAGE_FOLDER+jo.getString("picture"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return(category);
-    }
-
     public Rating popListRating(JSONObject jo)throws JSONException{
         Rating rating = new Rating();
 
@@ -98,31 +96,99 @@ public class BaseActivity extends AppCompatActivity {
         rating.setDateTime(jo.getString("date_time"));
         rating.setImageUser(ServerInfo.IMAGE_FOLDER+jo.getString("picture_user"));
 
-
         return(rating);
     }
 
-    public Place popListPlaces(JSONObject jo){
+    public Country popCountryObj(JSONObject jo){
+        Country c = null;
+        try {
+            c = new Country();
+            c.setId(jo.getString("id"));
+            c.setName(jo.getString("name"));
+            c.setDateTime(jo.getString("date_time"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+    public State popStateObj(JSONObject jo){
+        State s = null;
+
+        try {
+            s = new State();
+            s.setId(jo.getString("id"));
+            s.setName(jo.getString("name"));
+            s.setDateTime(jo.getString("date_time"));
+            s.setCountry(popCountryObj(jo.getJSONObject("country")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public City popCityObj(JSONObject jo){
+        City c = null;
+
+        try {
+            c = new City();
+            c.setId(jo.getString("id"));
+            c.setName(jo.getString("name"));
+            c.setDateTime(jo.getString("date_time"));
+            c.setState(popStateObj(jo.getJSONObject("state")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+    public District popDistrictObj(JSONObject jo){
+        District d = null;
+
+        try {
+            d = new District();
+            d.setId(jo.getString("id"));
+            d.setName(jo.getString("name"));
+            d.setDateTime(jo.getString("date_time"));
+            d.setCity(popCityObj(jo.getJSONObject("city")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public Category popCategoryObj(JSONObject jo){
+        Category c = null;
+
+        try {
+            c = new Category();
+            c.setId(jo.getString("id"));
+            c.setName(jo.getString("name"));
+            c.setDateTime(jo.getString("date_time"));
+            c.setPicture(jo.getString("picture"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+    public Place popPlaceObj(JSONObject jo){
         Place place = new Place();
 
         try {
             place.setId(jo.getString("id"));
-            place.setIdCategory(jo.getString("id_category"));
-            place.setIdDistrict(jo.getString("id_district"));
-            place.setIdCity(jo.getString("id_city"));
-            place.setIdState(jo.getString("id_state"));
-            place.setIdCountry(jo.getString("id_country"));
             place.setName(jo.getString("name"));
             place.setDescription(jo.getString("description"));
             place.setAddr(jo.getString("addr"));
             place.setPicturePlace(ServerInfo.IMAGE_FOLDER+jo.getString("picture_place"));
             place.setLatitude(jo.getString("latitude"));
             place.setLongitude(jo.getString("longitude"));
-            place.setCategory(jo.getString("name_category"));
-            place.setDistrict(jo.getString("name_district"));
-            place.setCity(jo.getString("name_city"));
-            place.setState(jo.getString("name_state"));
-            place.setCountry(jo.getString("name_country"));
+            if(jo.has("district")){
+                place.setDistrict(popDistrictObj(jo.getJSONObject("district")));
+            }
+            if(jo.has("category")){
+                place.setCategory(popCategoryObj(jo.getJSONObject("category")));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

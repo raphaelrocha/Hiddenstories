@@ -9,45 +9,15 @@ import android.os.Parcelable;
 public class Place implements Parcelable {
 
     private String id;
-
+    private District district;
+    private Category category;
     private String name;
     private String description;
     private String addr;
     private String latitude;
     private String longitude;
     private String picturePlace;
-
-    private String category;
-    private String district;
-    private String city;
-    private String state;
-    private String country;
-
-    private String idDistrict;
-    private String idCategory;
-    private String idCity;
-    private String idState;
-    private String idCountry;
-
-    public Place(){
-
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
+    private String dateTime;
 
     public String getId() {
         return id;
@@ -57,12 +27,20 @@ public class Place implements Parcelable {
         this.id = id;
     }
 
-    public String getDistrict() {
+    public District getDistrict() {
         return district;
     }
 
-    public void setDistrict(String district) {
+    public void setDistrict(District district) {
         this.district = district;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getName() {
@@ -89,6 +67,21 @@ public class Place implements Parcelable {
         this.addr = addr;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     public String getPicturePlace() {
         return picturePlace;
@@ -98,76 +91,15 @@ public class Place implements Parcelable {
         this.picturePlace = picturePlace;
     }
 
-    public String getCity() {
-        return city;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getIdDistrict() {
-        return idDistrict;
-    }
-
-    public void setIdDistrict(String idDistrict) {
-        this.idDistrict = idDistrict;
-    }
-
-    public String getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(String idCategory) {
-        this.idCategory = idCategory;
-    }
-
-    public String getIdCity() {
-        return idCity;
-    }
-
-    public void setIdCity(String idCity) {
-        this.idCity = idCity;
-    }
-
-    public String getIdState() {
-        return idState;
-    }
-
-    public void setIdState(String idState) {
-        this.idState = idState;
-    }
-
-    public String getIdCountry() {
-        return idCountry;
-    }
-
-    public void setIdCountry(String idCountry) {
-        this.idCountry = idCountry;
+    public Place(){
     }
 
     @Override
@@ -177,24 +109,15 @@ public class Place implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeString( getId() );
         dest.writeString( getName() );
         dest.writeString( getAddr() );
         dest.writeString( getDescription() );
-        dest.writeString(getCity());
-        dest.writeString( getCountry() );
         dest.writeString(getLatitude());
         dest.writeString( getPicturePlace() );
         dest.writeString( getLongitude() );
-        dest.writeString( getDistrict() );
-        dest.writeString( getIdCategory() );
-        dest.writeString( getIdDistrict() );
-        dest.writeString( getIdCity() );
-        dest.writeString( getIdCountry() );
-        dest.writeString( getIdState() );
-        dest.writeString( getCategory() );
-
+        dest.writeParcelable( getDistrict() ,flags);
+        dest.writeParcelable( getCategory() ,flags);
     }
 
     public Place(Parcel parcel){
@@ -202,19 +125,11 @@ public class Place implements Parcelable {
         setName(parcel.readString());
         setAddr(parcel.readString());
         setDescription(parcel.readString());
-        setCity(parcel.readString());
-        setCountry(parcel.readString());
         setLatitude(parcel.readString());
         setPicturePlace(parcel.readString());
         setLongitude(parcel.readString());
-        setDistrict(parcel.readString());
-        setIdDistrict(parcel.readString());
-        setIdCity(parcel.readString());
-        setIdState(parcel.readString());
-        setIdCountry(parcel.readString());
-        setIdCategory(parcel.readString());
-        setCategory(parcel.readString());
-
+        setDistrict((District) parcel.readParcelable(District.class.getClassLoader()));
+        setCategory((Category) parcel.readParcelable(Category.class.getClassLoader()));
     }
 
     public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>(){
