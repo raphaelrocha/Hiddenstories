@@ -119,9 +119,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         }
 
         //mostra a localização do local.
-        String[] parts = mPlace.getLocation().split(";");
-        Double proLat = Double.parseDouble(parts[0]);
-        Double proLng = Double.parseDouble(parts[1]);
+        Double proLat = Double.parseDouble(mPlace.getLatitude());
+        Double proLng = Double.parseDouble(mPlace.getLongitude());
 
         // Add a marker in Sydney and move the camera
         LatLng placeLocation = new LatLng(proLat, proLng);

@@ -13,7 +13,8 @@ public class Place implements Parcelable {
     private String name;
     private String description;
     private String addr;
-    private String location;
+    private String latitude;
+    private String longitude;
     private String picturePlace;
 
     private String category;
@@ -31,6 +32,23 @@ public class Place implements Parcelable {
     public Place(){
 
     }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     public String getId() {
         return id;
     }
@@ -71,13 +89,6 @@ public class Place implements Parcelable {
         this.addr = addr;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public String getPicturePlace() {
         return picturePlace;
@@ -173,9 +184,9 @@ public class Place implements Parcelable {
         dest.writeString( getDescription() );
         dest.writeString(getCity());
         dest.writeString( getCountry() );
-        dest.writeString(getLocation());
+        dest.writeString(getLatitude());
         dest.writeString( getPicturePlace() );
-        dest.writeString( getLocation() );
+        dest.writeString( getLongitude() );
         dest.writeString( getDistrict() );
         dest.writeString( getIdCategory() );
         dest.writeString( getIdDistrict() );
@@ -193,9 +204,9 @@ public class Place implements Parcelable {
         setDescription(parcel.readString());
         setCity(parcel.readString());
         setCountry(parcel.readString());
-        setLocation(parcel.readString());
+        setLatitude(parcel.readString());
         setPicturePlace(parcel.readString());
-        setLocation(parcel.readString());
+        setLongitude(parcel.readString());
         setDistrict(parcel.readString());
         setIdDistrict(parcel.readString());
         setIdCity(parcel.readString());

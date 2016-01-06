@@ -217,10 +217,16 @@ public class CategoryListActivity extends BaseActivity {
                         //for (int count = 0, tam = navigationDrawerLeft.getDrawerItems().size(); count < tam; count++) {
                             //if (count == mPositionClicked && mPositionClicked <= 6) {
                                 if (position == 1) {
+                                    //AJSUTES
+                                    //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
+                                    Intent myIntent = new Intent(CategoryListActivity.this, AdjustActivity.class);
+                                    startActivityForResult(myIntent, 0);
+                                }
+                                else if (position == 2) {
                                     //SAIR
                                     //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
                                     logoutUser();
-                                } else if (position == 2) {
+                                } else if (position == 3) {
                                     //SAIR
                                     //Toast.makeText(MainActivity.this, "click: " + i, Toast.LENGTH_SHORT).show();
                                     clearSearchHistory();
@@ -268,6 +274,7 @@ public class CategoryListActivity extends BaseActivity {
         //navigationDrawerLeft.addItem(new DividerDrawerItem());
         //navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_configuration).withIcon(getResources().getDrawable(R.drawable.settings)));
         //navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_configuration).withIcon(getResources().getDrawable(R.drawable.settings)));
+        navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_adjust).withIcon(getResources().getDrawable(R.drawable.settings)));
         navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_logout).withIcon(getResources().getDrawable(R.drawable.logout)));
         navigationDrawerLeft.addItem(new SecondaryDrawerItem().withName(R.string.drawer_clear_search_history).withIcon(getResources().getDrawable(R.drawable.ic_delete_variant)));
         //navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));

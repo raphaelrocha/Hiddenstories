@@ -54,7 +54,8 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
     private EditText mNameLocal, mDescriptionLocal;
     private TextView mAddrLocal;
     private VolleyConnection mVolleyConnection;
-    private String mIMAGE_TO_SAVE, mLATLONG;
+    private String mIMAGE_TO_SAVE;
+    private Double mLAT, mLNG;
     private GoogleApiClient mGoogleApiClient;
     private Category mCategory;
 
@@ -139,7 +140,7 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
         String description = mDescriptionLocal.getText().toString().trim();
         String image = mIMAGE_TO_SAVE;
         String ext = ServerInfo.EXTENSION_IMAGE_FILE;
-        String location = mLATLONG;
+
         String id_category = mCategory.getId();
 
         HashMap<String,String> params = new HashMap<String,String>();
@@ -149,7 +150,8 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
         params.put("id_category", id_category);
         params.put("description", description);
         params.put("addr",addr);
-        params.put("location", location);
+        params.put("latitude", mLAT.toString());
+        params.put("longitude", mLNG.toString());
         params.put("picture", image);
         params.put("ext", ext);
 
@@ -253,7 +255,9 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
             Geocoder gc = new Geocoder(this, Locale.getDefault());
             try {
                 //-23.548882, -46.631215
-                mLATLONG =  l.getLatitude()+";"+l.getLongitude();
+
+                mLAT =  l.getLatitude();
+                mLNG =  l.getLongitude();
                 List<Address> addresses = gc.getFromLocation(l.getLatitude(), l.getLongitude(), 1);
                 //List<Address> addresses = gc.getFromLocation(-23.548882, -46.631215, 1);
                 Log.d("=getCountryName()=",addresses.toString());

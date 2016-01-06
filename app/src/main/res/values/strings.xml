@@ -42,6 +42,7 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
     <string name="drawer_logout">Sair</string>
     <string name="drawer_clear_search_history">Limpar histórico de buscas</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="drawer_adjust">Configurações</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -64,6 +65,12 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
     <!--RatingListFragment-->
     <string name="list_empty">Ainda não existem comentários sobre este local. Seja o primeiro.!</string>
     <string name="album_empty">Ainda não existem fotos deste local. Seja o primeiro.!</string>
+
+    <!--Adjust Activity-->
+    <string name="adjust_activity">Configurações</string>
+    <string name="radius_disclaimer">   O raio de busca define a distância máxima que um profissional deve estar de você para que ele seja visualizado em suas buscas. Quanto maior o raio, mais distante será o limite das buscas. Por padrão, o procuramos locais a no máximo 50Km de distância de você. </string>
+    <string name="radius_label">Deslize para configurar o raio de busca.</string>
+    <string name="restore_label">Redefinir para o raio padrão.</string>
 
     <!--Erros-->
     <string name="erro_000019">Algo deu Errado.(000019)</string>

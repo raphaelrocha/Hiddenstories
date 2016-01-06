@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.ufam.hiddenstories.models.Place;
 import com.ufam.hiddenstories.models.Rating;
 import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.provider.SearchableProvider;
+import com.ufam.hiddenstories.tools.GPSTracker;
 import com.ufam.hiddenstories.tools.SessionManager;
 
 import org.json.JSONArray;
@@ -43,6 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     private SessionManager session;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    final String TAG = BaseActivity.this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,8 @@ public class BaseActivity extends AppCompatActivity {
             place.setDescription(jo.getString("description"));
             place.setAddr(jo.getString("addr"));
             place.setPicturePlace(ServerInfo.IMAGE_FOLDER+jo.getString("picture_place"));
-            place.setLocation(jo.getString("location"));
+            place.setLatitude(jo.getString("latitude"));
+            place.setLongitude(jo.getString("longitude"));
             place.setCategory(jo.getString("name_category"));
             place.setDistrict(jo.getString("name_district"));
             place.setCity(jo.getString("name_city"));
@@ -285,6 +289,63 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+    }
+
+    public GPSTracker getGpsTracker (){
+        GPSTracker gpsTracker = new GPSTracker(this);
+
+        if (gpsTracker.getIsGPSTrackingEnabled())
+        {
+            //Double lat = gpsTracker.getLatitude();
+            //Double lng = gpsTracker.getLongitude();
+            //showLongSnack(lat.toString()+lng.toString());
+            /*String stringLatitude = String.valueOf(gpsTracker.latitude);
+            textview = (TextView)findViewById(R.id.fieldLatitude);
+            textview.setText(stringLatitude);
+
+            String stringLongitude = String.valueOf(gpsTracker.longitude);
+            textview = (TextView)findViewById(R.id.fieldLongitude);
+            textview.setText(stringLongitude);
+
+            String country = gpsTracker.getCountryName(this);
+            textview = (TextView)findViewById(R.id.fieldCountry);
+            textview.setText(country);
+
+            String city = gpsTracker.getLocality(this);
+            textview = (TextView)findViewById(R.id.fieldCity);
+            textview.setText(city);
+
+            String postalCode = gpsTracker.getPostalCode(this);
+            textview = (TextView)findViewById(R.id.fieldPostalCode);
+            textview.setText(postalCode);
+
+            String addressLine = gpsTracker.getAddressLine(this);
+            textview = (TextView)findViewById(R.id.fieldAddressLine);
+            textview.setText(addressLine);*/
+
+            return gpsTracker;
+        }
+        else
+        {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            //gpsTracker.showSettingsAlert();
+            //showLongSnack("Erro ao consultar GPS");
+            return null;
+        }
+    }
+
+    //raio para buscas
+    public void saveDistanceRadius(int value){
+        Log.w(TAG,"saveDistanceRadius(int value)");
+        getEditorPref().putInt("ul-distance_radius", value); // Storing boolean - true/false
+        getEditorPref().commit(); // commit changes
+    }
+
+    //raio para buscas
+    public int getDistanceRadius(){
+        return getPrefs().getInt("ul-distance_radius",50);
     }
 
 }

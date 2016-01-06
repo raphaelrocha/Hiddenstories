@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
 import com.ufam.hiddenstories.PlaceActivity;
+import com.ufam.hiddenstories.PlaceListActivity;
 import com.ufam.hiddenstories.R;
 import com.ufam.hiddenstories.adapters.CategoryListAdapter;
 import com.ufam.hiddenstories.adapters.PlaceListAdapter;
@@ -32,6 +33,7 @@ import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.interfaces.RecyclerViewOnClickListenerHack;
 import com.ufam.hiddenstories.models.Category;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.tools.GPSTracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,9 +69,18 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     protected void callServer(){
+        GPSTracker gpsTracker = ((BaseActivity)getActivity()).getGpsTracker();
+        Double lat = gpsTracker.getLatitude();
+        Double lng = gpsTracker.getLongitude();
+
+        Integer radius = ((BaseActivity)getActivity()).getDistanceRadius();
+
         Log.i("PLACELISTFRAG","callServer()"+ mCategory.getId());
         HashMap<String, String> params = new  HashMap<String, String> ();
         params.put("id_cat", mCategory.getId());
+        params.put("lat", lat.toString());
+        params.put("lng", lng.toString());
+        params.put("radius", radius.toString());
 
         mVolleyConnection.callServerApiByJsonArrayRequest(ServerInfo.GET_PLACE_BY_CAT, Request.Method.POST,params,null);
     }

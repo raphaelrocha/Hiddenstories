@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ufam.hiddenstories.AdjustActivity">
+
+
+    <include layout="@layout/toolbar_layout"
+        android:id="@+id/toolbar_layout"/>
+
+    <ScrollView
+        android:layout_below="@id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radius_disclaimer"
+                android:text="@string/radius_disclaimer"/>
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/radius_label"
+                android:text="@string/radius_label"
+                android:layout_below="@id/radius_disclaimer"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/seek_bar_radius"
+                android:padding="20dp"
+                android:layout_below="@id/radius_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="300"
+                android:layout_toRightOf="@+id/distance"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:id="@+id/distance"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="000 Km"
+                android:layout_below="@+id/radius_label"
+                android:layout_alignLeft="@+id/button_restore_radius"
+                android:layout_alignStart="@+id/button_restore_radius"
+                android:layout_alignBottom="@+id/seek_bar_radius" />
+
+            <ImageButton
+                android:layout_marginLeft="10dp"
+                android:id="@+id/button_restore_radius"
+                android:src="@drawable/ic_backup_restore"
+                android:layout_below="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:padding="10dp"
+                android:gravity="center"
+                android:id="@+id/label_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/restore_label"
+                android:layout_toRightOf="@+id/button_restore_radius"
+                android:layout_toEndOf="@+id/button_restore_radius"
+                android:layout_alignBottom="@+id/button_restore_radius"
+                android:layout_alignTop="@+id/button_restore_radius" />
+
+            <View
+                android:layout_marginTop="10dp"
+                android:id="@+id/vw_divider_radius"
+                android:layout_below="@+id/button_restore_radius"
+                android:background="@color/colorDivider"
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp" />
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
