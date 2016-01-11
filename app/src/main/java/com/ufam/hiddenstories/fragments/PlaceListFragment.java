@@ -73,6 +73,11 @@ public class PlaceListFragment extends Fragment implements RecyclerViewOnClickLi
         Double lat = gpsTracker.getLatitude();
         Double lng = gpsTracker.getLongitude();
 
+        if(lat==0 ||  lng==0){
+            lat = -3.088281;//temp ufam
+            lng = -59.964379;//temp ufam
+        }
+
         Integer radius = ((BaseActivity)getActivity()).getDistanceRadius();
 
         Log.i(TAG,"callServer()"+ mCategory.getId());

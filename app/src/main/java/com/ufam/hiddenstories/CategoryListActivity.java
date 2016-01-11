@@ -64,6 +64,7 @@ public class CategoryListActivity extends BaseActivity {
     private AccountHeader headerNavigationLeft;
     private User userLogged;
     private int mPositionClicked;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,27 @@ public class CategoryListActivity extends BaseActivity {
 
         setDrawerUser(savedInstanceState,toolbar);
 
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMap();
+            }
+        });
+
+    }
+
+    public void hideFab(){
+        mFab.hide();
+    }
+    public void showFab(){
+        mFab.show();
+    }
+
+    private void goToMap(){
+        Intent myIntent = new Intent(CategoryListActivity.this, MapsActivity.class);
+        myIntent.putExtra("mode", "many");
+        startActivityForResult(myIntent, 0);
     }
 
 
@@ -218,9 +240,7 @@ public class CategoryListActivity extends BaseActivity {
                             //if (count == mPositionClicked && mPositionClicked <= 6) {
                                 if (position == 1) {
                                     //MAPA
-                                    Intent myIntent = new Intent(CategoryListActivity.this, MapsActivity.class);
-                                    myIntent.putExtra("mode", "many");
-                                    startActivityForResult(myIntent, 0);
+                                    goToMap();
                                 }
                                 else  if (position == 2) {
                                     //AJSUTES

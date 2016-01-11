@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ufam.hiddenstories.BaseActivity;
+import com.ufam.hiddenstories.CategoryListActivity;
 import com.ufam.hiddenstories.PlaceActivity;
 import com.ufam.hiddenstories.PlaceListActivity;
 import com.ufam.hiddenstories.R;
@@ -74,8 +76,35 @@ public class CategoryListFragment extends Fragment implements RecyclerViewOnClic
 
         mRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getActivity(), mRecyclerView, this));
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        //llm.setOrientation(LinearLayoutManager.VERTICAL);
+        GridLayoutManager llm = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(dy > 0){
+                    //Log.i(TAG, "scroll up!");
+                    ((CategoryListActivity)getContext()).hideFab();;
+                }
+                else{
+                    //Log.i(TAG, "scroll down!");
+                    ((CategoryListActivity)getContext()).showFab();;
+                }
+
+
+
+            }
+        });
+
         //llm.setReverseLayout(true);
         mRecyclerView.setLayoutManager(llm);
 

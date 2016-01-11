@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edt_send_commentary"
+        android:textColor="@color/colorPrimarytext"
+        android:textColorHint="@color/colorSecond"
         android:hint="Deixe aqui seu comentário."
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/bt_send_commentary"
@@ -25,6 +27,7 @@
         android:background="@color/white" />
 
     <ImageButton
+        android:background="@color/white"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:padding="10dp"

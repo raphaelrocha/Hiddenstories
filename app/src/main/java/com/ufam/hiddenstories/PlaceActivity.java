@@ -11,15 +11,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Display;
@@ -31,7 +25,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -53,7 +46,6 @@ import com.ufam.hiddenstories.tools.RatingAvgCalculator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +56,6 @@ import bolts.Bolts;
 public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackInterface{
 
     private TextView tvDescription;
-    private ViewGroup mRoot;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Place mPlace;
@@ -78,6 +69,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     private RatingBar mRatingBarAverage;
     private TextView mTotalRating;
     private TextView mTvAverage;
+    private final String TAG = PlaceActivity.this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +163,10 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         //mCollapsingToolbarLayout.setTitle("1Teatro Amazonas");
 
         //mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
+
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
         mCollapsingToolbarLayout.setTitle(mPlace.getName());
+        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TransparentText);
         //mCollapsingToolbarLayout.setExpandedTitleTextAppearance(getResources().getColor(R.color.transparent));
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -190,7 +185,6 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
             }
         });
 
-        mRoot = (ViewGroup) findViewById(R.id.place_ll_tv_description);
         tvDescription = (TextView) findViewById(R.id.place_tv_description);
         ivPlace = (SimpleDraweeView) findViewById(R.id.iv_place);
 
@@ -239,7 +233,8 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
         //tvPlaceCity.setText(getResources().getString(R.string.tmp_place_city));//texto temporario com o nome da cidade
 
         tvPlaceName.setText(mPlace.getName());//texto temporario com o nome do local
-        String cityDistrict = mPlace.getDistrict().getCity().getName()+"/"+mPlace.getDistrict().getName();
+        //String cityDistrict = mPlace.getDistrict().getCity().getName()+"/"+mPlace.getDistrict().getName();
+        String cityDistrict = mPlace.getAddr();
         tvPlaceCity.setText(cityDistrict);//texto temporario com o nome da cidade
 
         tvPlaceName.setTypeface(null, Typeface.BOLD);
@@ -261,6 +256,8 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
 
         //setIconOptions();
+
+
 
         getRating();
         checkFavorite(mPlace);
@@ -415,10 +412,6 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
 
     @Override
     public void onBackPressed() {
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
-            TransitionManager.beginDelayedTransition(mRoot, new Slide());
-            tvDescription.setVisibility( View.INVISIBLE );
-        }
         super.onBackPressed();
     }
 
@@ -439,7 +432,7 @@ public class PlaceActivity extends BaseActivity implements CustomVolleyCallbackI
     public void rat_btn(){
         final Dialog rankDialog;
         final RatingBar ratingBar;
-        Log.i("PROFESSIONAL_PROFILE","rat_bnt()");
+        Log.i(TAG,"rat_bnt()");
         String TAG = "set-rat";
         rankDialog = new Dialog(this, R.style.FullHeightDialog);
         rankDialog.setContentView(R.layout.dialog_rating);

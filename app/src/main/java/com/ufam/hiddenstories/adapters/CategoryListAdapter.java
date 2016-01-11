@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,6 +141,41 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         myViewHolder.tvCategoryName.setText(mList.get(position).getName());
 
+        int w = 0;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+            if( myViewHolder.ivRvCat.getLayoutParams().width == FrameLayout.LayoutParams.MATCH_PARENT
+                    || myViewHolder.ivRvCat.getLayoutParams().width == FrameLayout.LayoutParams.WRAP_CONTENT){
+
+                Display display = ( (Activity) mContext ).getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize( size );
+
+                try{
+                    w = size.x;
+                }
+                catch( Exception e ){
+                    w = display.getWidth();
+                }
+            }
+        }else{
+            w=400;
+        }
+
+
+        Uri uri = Uri.parse(DataUrl.getUrlCustom(mList.get(position).getPicture(), w));
+
+        DraweeController dc = Fresco.newDraweeControllerBuilder()
+                .setUri( uri )
+                //.setTapToRetryEnabled(true)
+                //.setControllerListener( listener )
+                .setOldController(myViewHolder.ivRvCat.getController())
+                .build();
+
+        RoundingParams rp = RoundingParams.fromCornersRadii(roundPixels, roundPixels, 0, 0);
+
+        myViewHolder.ivRvCat.setController(dc);
+        myViewHolder.ivRvCat.getHierarchy().setRoundingParams(rp);
+
     }
 
     @Override
@@ -166,11 +203,16 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView tvCategoryName;
+        public SimpleDraweeView ivRvCat;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             tvCategoryName = (TextView) itemView.findViewById(R.id.tv_category_name);
+            ivRvCat = (SimpleDraweeView) itemView.findViewById(R.id.iv_card_category);
+
+            tvCategoryName.setGravity(Gravity.CENTER);
+            tvCategoryName.bringToFront();
 
             itemView.setOnClickListener(this);
         }

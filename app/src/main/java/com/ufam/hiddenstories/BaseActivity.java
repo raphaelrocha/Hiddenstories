@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
@@ -52,7 +54,8 @@ public class BaseActivity extends AppCompatActivity {
     private SessionManager session;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    final String TAG = BaseActivity.this.getClass().getSimpleName();
+    private final String TAG = BaseActivity.this.getClass().getSimpleName();
+    private int DEFALT_RADIUS = 10;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -74,6 +77,11 @@ public class BaseActivity extends AppCompatActivity {
 
         pref = getApplicationContext().getSharedPreferences("hiddenstories.ufam.com", 0); // 0 - for private mode
         editor = pref.edit();
+
+        //MUDA COR DA BARRA DE NAVEHAÇÃO DO SISTEMA
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+        }
     }
 
     protected Context getContext() {
@@ -195,7 +203,7 @@ public class BaseActivity extends AppCompatActivity {
             c.setId(jo.getString("id"));
             c.setName(jo.getString("name"));
             c.setDateTime(jo.getString("date_time"));
-            c.setPicture(jo.getString("picture"));
+            c.setPicture(ServerInfo.IMAGE_FOLDER+jo.getString("picture"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -262,6 +270,7 @@ public class BaseActivity extends AppCompatActivity {
         View view = snack.getView();
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setTextColor(Color.WHITE);
         tv.setText(msg);
         snack.show();
     }
@@ -271,6 +280,7 @@ public class BaseActivity extends AppCompatActivity {
         View view = snack.getView();
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setTextColor(Color.WHITE);
         tv.setText(msg);
         snack.show();
     }
@@ -447,7 +457,14 @@ public class BaseActivity extends AppCompatActivity {
 
     //raio para buscas
     public int getDistanceRadius(){
-        return getPrefs().getInt("ul-distance_radius",50);
+        int radius;
+        try {
+            radius = getPrefs().getInt("ul-distance_radius",DEFALT_RADIUS);
+        }catch (Exception e){
+            e.printStackTrace();
+            radius = DEFALT_RADIUS;
+        }
+        return radius;
     }
 
     public User getUserLoggedObj(){
@@ -467,6 +484,12 @@ public class BaseActivity extends AppCompatActivity {
 
         getEditorPref().putString("ul-obj", jsonUserLogged); // Storing string
         getEditorPref().commit(); // commit changes
+    }
+
+    protected void goToHome(){
+        Intent intent  = new Intent(this, CategoryListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 }

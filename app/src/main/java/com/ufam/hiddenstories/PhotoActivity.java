@@ -3,6 +3,7 @@ package com.ufam.hiddenstories;
 import android.app.Activity;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -113,8 +114,14 @@ public class PhotoActivity extends BaseActivity {
     private void handleToolbar(){
         if(appBar.getVisibility()== View.INVISIBLE){
             appBar.setVisibility(View.VISIBLE);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            }
         }else if (appBar.getVisibility()==View.VISIBLE){
             appBar.setVisibility(View.INVISIBLE);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
+            }
         }
     }
 }

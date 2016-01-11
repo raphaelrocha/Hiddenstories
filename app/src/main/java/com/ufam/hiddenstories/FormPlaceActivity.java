@@ -18,8 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Category;
+import com.ufam.hiddenstories.tools.NothingSelectedSpinnerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,6 +61,8 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
     private Double mLAT, mLNG;
     private GoogleApiClient mGoogleApiClient;
     private Category mCategory;
+    private Spinner mSpinCat;
+    private ArrayAdapter<CharSequence> spinAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

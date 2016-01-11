@@ -65,6 +65,7 @@
                 android:layout_alignBottom="@+id/seek_bar_radius" />
 
             <ImageButton
+                android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:id="@+id/button_restore_radius"
                 android:src="@drawable/ic_backup_restore"
