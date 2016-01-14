@@ -13,6 +13,7 @@
     tools:showIn="@layout/activity_form_user">
 
     <EditText
+        android:textColor="@color/colorPrimarytext"
         android:layout_marginTop="20dp"
         android:id="@+id/edt_user_name"
         android:layout_width="300dp"
@@ -23,6 +24,7 @@
         />
 
     <EditText
+        android:textColor="@color/colorPrimarytext"
         android:layout_marginTop="20dp"
         android:layout_below="@id/edt_user_name"
         android:id="@+id/edt_login_user"
@@ -34,6 +36,7 @@
         />
 
     <EditText
+        android:textColor="@color/colorPrimarytext"
         android:layout_marginTop="20dp"
         android:layout_below="@id/edt_login_user"
         android:id="@+id/edt_login_passwd"
@@ -45,6 +48,7 @@
         />
 
     <EditText
+        android:textColor="@color/colorPrimarytext"
         android:layout_marginTop="20dp"
         android:layout_below="@id/edt_login_passwd"
         android:id="@+id/edt_login_passwd_2"

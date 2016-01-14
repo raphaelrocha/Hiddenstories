@@ -19,6 +19,7 @@ public class ServerInfo {
     public static final String GET_PLACE_BY_CAT = SERVER_ADDR + SERVER_FOLDER + "/place/getbycat"; //servidor aws
     public static final String FIND_PLACE = SERVER_ADDR + SERVER_FOLDER + "/place/find";
     public static final String LOGIN = SERVER_ADDR + SERVER_FOLDER + "/user/login";
+    public static final String CREATE_USER = SERVER_ADDR + SERVER_FOLDER + "/user/create";
     public static final String SET_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/mark";
     public static final String UNSET_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/unmark";
     public static final String  CHECK_FAVORITE = SERVER_ADDR + SERVER_FOLDER + "/favorite/check";

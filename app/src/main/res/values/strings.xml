@@ -3,6 +3,7 @@
     <string name="app_name">Hidden Stories</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_place">PlaceActivity</string>
+    <string name="facebook_app_id">1545167329129673</string>
 
     <string name="tmp_place_name">Teatro Amazonas</string>
     <string name="tmp_place_city">Manaus / AM</string>
@@ -92,4 +93,5 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
         <item>Igrejas</item>
         <item>Portos</item>
     </string-array>
+    <string name="title_activity_login_facebook">LoginFacebookActivity</string>
 </resources>

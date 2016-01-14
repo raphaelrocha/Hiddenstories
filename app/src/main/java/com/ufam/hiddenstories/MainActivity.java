@@ -18,6 +18,15 @@ import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
@@ -28,15 +37,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements CustomVolleyCallbackInterface {
 
     private final String TAG = MainActivity.this.getClass().getSimpleName();
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,11 +84,54 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
             showDialog("Aguarde.",false);
             startApp(getUserLoggedObj());
         }
+
+        LoginButton loginButton = (LoginButton) findViewById(R.id.fb_login_button);
+
+        String upgradeUsername,upgradePasswd;
+
+        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday", "user_friends"));
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.i("FACEBOOK", "LOGIN SUCESS");
+                        //AppController.getINSTANCE().setFacebookLogin(true);
+                        ProfileTracker mProfileTracker = new ProfileTracker() {
+                            @Override
+                            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+                                // Fetch user details from New Profile
+                                // Log.i("FACEBOOK", newProfile.getFirstName());
+                                // Log.i("FACEBOOK", newProfile.getLinkUri().toString());
+                                //AppController.getINSTANCE().setOldProfile(oldProfile);
+                                //AppController.getINSTANCE().setNewProfile(newProfile);
+                                Intent intent = new Intent(getActivity(), LoginFacebookActivity.class);
+                                intent.putExtra("newProfile",newProfile );
+                                intent.putExtra("oldProfile",oldProfile );
+                                startActivity(intent);
+                                //finish();
+                            }
+                        };
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.i("FACEBOOK", "LOGIN CANCEL");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.i("FACEBOOK", "LOGIN ERROR: "+exception);
+                    }
+                });
     }
 
     private void login(String user, String passwd){
         HashMap<String,String> params = new HashMap<String,String>();
-        params.put("user",user);
+        params.put("email",user);
         params.put("passwd",passwd);
         VolleyConnection conn = new VolleyConnection(this);
         conn.callServerApiByJsonObjectRequest(ServerInfo.LOGIN, Request.Method.POST,false, params,"LOGIN");
@@ -206,5 +261,12 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
     @Override
     public void deliveryError(VolleyError error, String TAG) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("RESULT FACEBOOK ","onActivityResult");
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

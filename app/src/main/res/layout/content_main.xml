@@ -18,9 +18,11 @@
         android:hint="@string/login_user_hint"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:textColor="@color/colorPrimarytext"
         />
 
     <EditText
+        android:textColor="@color/colorPrimarytext"
         android:layout_marginTop="20dp"
         android:layout_below="@id/edt_login_user"
         android:id="@+id/edt_login_passwd"
@@ -55,6 +57,18 @@
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        />
+
+    <com.facebook.login.widget.LoginButton
+        android:layout_below="@+id/btn_new_user"
+        android:id="@+id/fb_login_button"
+        android:layout_width="249dp"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:scaleType="centerInside"
         />
 
 </RelativeLayout>

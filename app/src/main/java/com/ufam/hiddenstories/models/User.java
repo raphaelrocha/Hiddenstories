@@ -11,6 +11,15 @@ public class User implements  Parcelable{
     private String name;
     private String email;
     private String pictureProfile;
+    private String passwd;
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
 
     public String getEmail() {
         return email;
@@ -58,6 +67,7 @@ public class User implements  Parcelable{
         dest.writeString( getName() );
         dest.writeString( getEmail() );
         dest.writeString( getPictureProfile() );
+        dest.writeString( getPasswd() );
     }
 
     public User(Parcel parcel){
@@ -65,6 +75,7 @@ public class User implements  Parcelable{
         setName(parcel.readString());
         setEmail(parcel.readString());
         setPictureProfile(parcel.readString());
+        setPasswd(parcel.readString());
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>(){

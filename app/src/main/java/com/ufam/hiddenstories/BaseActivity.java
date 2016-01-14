@@ -1,5 +1,6 @@
 package com.ufam.hiddenstories;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,7 +24,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnectionQueue;
@@ -67,6 +70,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         Fresco.initialize(this);
 
         dialog = new ProgressDialog(this);
@@ -92,6 +96,9 @@ public class BaseActivity extends AppCompatActivity {
         VolleyConnectionQueue.getINSTANCE().startQueue(this);
     }
 
+    protected Activity getActivity() {
+        return this;
+    }
 
     public Rating popRatingObj(JSONObject jo)throws JSONException{
         Rating rating = new Rating();
@@ -246,12 +253,22 @@ public class BaseActivity extends AppCompatActivity {
         return(place);
     }
 
-    public User popUser(JSONObject jo) throws JSONException {
-        User user = new User();
-        user.setId(jo.getString("id"));
-        user.setEmail(jo.getString("email"));
-        user.setName(jo.getString("name"));
-        user.setPictureProfile(ServerInfo.IMAGE_FOLDER+jo.getString("picture_profile"));
+    public User popUser(JSONObject jo){
+        User user = null;
+        try {
+            user = new User();
+            user.setId(jo.getString("id"));
+            user.setEmail(jo.getString("email"));
+            user.setName(jo.getString("name"));
+            if(jo.getString("picture_profile").contains("graph.facebook.com")){
+                user.setPictureProfile(jo.getString("picture_profile"));
+            }else{
+                user.setPictureProfile(ServerInfo.IMAGE_FOLDER + jo.getString("picture_profile"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return user;
     }
 
@@ -379,7 +396,7 @@ public class BaseActivity extends AppCompatActivity {
         editor.commit();
 
 
-        //LoginManager.getInstance().logOut();
+        LoginManager.getInstance().logOut();
         //AppController.getINSTANCE().setFacebookLogin(false);
 
         Intent intent  = new Intent(this, MainActivity.class);
