@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,21 +10,30 @@
         <item name="android:colorBackground">@color/white</item>
         <item name="android:textColorHint">@color/colorSecond</item>
         <item name="android:textColor">@color/colorPrimarytext</item>
+        <item name="colorControlNormal">@android:color/white</item> <!--mantem a setinha de voltar sempre branca-->
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" >
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" >
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat" >
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
 
     <style name="TransparentText" parent="@android:style/TextAppearance">
         <item name="android:textColor">#00000000</item>
@@ -37,6 +46,5 @@
     <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
     </style>
-
 
 </resources>

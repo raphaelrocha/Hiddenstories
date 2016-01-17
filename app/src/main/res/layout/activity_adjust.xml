@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:padding="10dp"
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:id="@+id/label_restore"
                 android:layout_width="wrap_content"
@@ -82,8 +82,8 @@
                 android:text="@string/restore_label"
                 android:layout_toRightOf="@+id/button_restore_radius"
                 android:layout_toEndOf="@+id/button_restore_radius"
-                android:layout_alignBottom="@+id/button_restore_radius"
-                android:layout_alignTop="@+id/button_restore_radius" />
+                android:layout_alignTop="@+id/button_restore_radius"
+                android:layout_above="@+id/vw_divider_radius" />
 
             <View
                 android:layout_marginTop="10dp"

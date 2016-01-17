@@ -32,7 +32,8 @@ public class FormUserActivity extends BaseActivity implements CustomVolleyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_user);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar  = setUpToolbar("Criar conta",true,false);
+        /*mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("Novo usuário");//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -46,7 +47,7 @@ public class FormUserActivity extends BaseActivity implements CustomVolleyCallba
                 onBackPressed();
                 finish();
             }
-        });
+        });*/
 
         mVolleyConnection = new VolleyConnection(this);
 

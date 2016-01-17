@@ -1,14 +1,23 @@
 package com.ufam.hiddenstories;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -31,6 +40,8 @@ import com.ufam.hiddenstories.conn.ServerInfo;
 import com.ufam.hiddenstories.conn.VolleyConnection;
 import com.ufam.hiddenstories.interfaces.CustomVolleyCallbackInterface;
 import com.ufam.hiddenstories.models.Place;
+import com.ufam.hiddenstories.models.Rating;
+import com.ufam.hiddenstories.models.User;
 import com.ufam.hiddenstories.tools.GMapV2Direction;
 
 import org.apache.http.HttpResponse;
@@ -52,7 +63,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, CustomVolleyCallbackInterface {
+        GoogleApiClient.OnConnectionFailedListener, CustomVolleyCallbackInterface, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private Place mPlace;
@@ -60,7 +71,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     private String mMode;
     private Toolbar mLocalToolbar;
     private VolleyConnection mVolleyConnection;
-    final String TAG = MapsActivity.this.getClass().getSimpleName();
+    private final String TAG = MapsActivity.this.getClass().getSimpleName();
+    private FloatingActionButton mFab;
+    private HashMap<Marker,Place> mMapPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +93,23 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         mLocalToolbar = setUpToolbar("Mapa",true,false);
         AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_maps);
         appbar.bringToFront();
+
+        mFab = (FloatingActionButton) findViewById(R.id.fab_eye);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLegend();
+            }
+        });
+
+        mFab.setVisibility(View.INVISIBLE);
+
+
     }
 
     private void callServer(){
         Integer radius_distance = getDistanceRadius();
-        showDialog("Buscando profissionais que estejam até "+radius_distance+" Km de onve você está.",true);
+        showDialog("Buscando locais que estejam a no máximo "+radius_distance+" Km de você.",true);
 
         Location l = LocationServices
                 .FusedLocationApi
@@ -125,6 +150,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
 
         mMap = googleMap;
 
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
@@ -139,7 +166,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 .FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
 
-        MarkerOptions options = new MarkerOptions();
+        MarkerOptions myOptions = new MarkerOptions();
 
         LatLng myLocation = null;
 
@@ -147,11 +174,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         if(l != null){
             myLocation = new LatLng(l.getLatitude(), l.getLongitude());
 
-            options = new MarkerOptions();
-            options.position(myLocation).title("Você está aqui.").draggable(true);
-            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
+            myOptions = new MarkerOptions();
+            myOptions.position(myLocation).title("Você está aqui.").draggable(true);
+            myOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
             //mMap.addMarker(new MarkerOptions().position(myLocation).title("Você está aqui."));
-            mMap.addMarker(options);
+            mMap.addMarker(myOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
         }
 
@@ -168,8 +195,32 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         //options.position(placeLocation).title(mPlace.getName()).snippet(mPlace.getAddr()).draggable(true);
         //options.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
         //mMap.addMarker(options);
-        Marker mMarkerPlace = mMap.addMarker(new MarkerOptions().position(placeLocation).title(mPlace.getName()).snippet(mPlace.getAddr()));
 
+
+        MarkerOptions options = new MarkerOptions();
+        options.position(placeLocation).title(mPlace.getName()).snippet(mPlace.getAddr()).draggable(true);
+
+        String idCat = mPlace.getCategory().getId();
+
+        if(idCat.equals("1")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_blue));
+        }else if(idCat.equals("2")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_brown));
+        }else if(idCat.equals("3")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_green));
+        }else if(idCat.equals("4")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_purpple));
+        }else if(idCat.equals("5")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_red));
+        }else if(idCat.equals("6")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_dark_red));
+        }else if(idCat.equals("7")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_light_brown));
+        }
+
+
+        Marker mMarkerPlace = mMap.addMarker(options);
+        //Marker mMarkerPlace = mMap.addMarker(new MarkerOptions().position(placeLocation).title(mPlace.getName()).snippet(mPlace.getAddr()));
         CameraPosition cameraPosition = new CameraPosition.Builder().target(placeLocation).zoom(16).bearing(0).tilt(0).build();
         CameraUpdate update = CameraUpdateFactory.newCameraPosition(cameraPosition);
 
@@ -197,8 +248,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     public void onConnected(Bundle bundle) {
 
         if(mMode.equals("one")){
+            mFab.setVisibility(View.INVISIBLE);
             startMapOne();
         }else if(mMode.equals("many")){
+            mFab.setVisibility(View.VISIBLE);
             callServer();
         }
 
@@ -293,6 +346,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
 
     private void startMapMany(JSONObject jo){
 
+        mMap.setOnInfoWindowClickListener(this);
+
+        mMapPlace = new HashMap<Marker, Place>();
+
         JSONArray ja = null;
         try {
             boolean b = jo.getBoolean("success");
@@ -315,7 +372,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                         Double lat = Double.parseDouble(places.get(i).getLatitude());
                         Double lng = Double.parseDouble(places.get(i).getLongitude());
 
-                        customAddMarker(new LatLng(lat, lng), places.get(i).getName(), places.get(i).getAddr() + ", " + places.get(i).getDistrict().getName(),"everybody");
+                        customAddMarker(new LatLng(lat, lng), places.get(i).getName(), places.get(i).getAddr() + ", " + places.get(i).getDistrict().getName(),"everybody",  places.get(i));
 
                     }catch(Exception e){
                         //Log.i("MAP ERROR",parts.toString());
@@ -334,16 +391,37 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         }
     }
 
-    private void customAddMarker(LatLng latLng, String title, String snippet,String me){
-        Log.i("APP", "customAddMarker");
+    private void customAddMarker(LatLng latLng, String title, String snippet,String me, Place place){
+        Log.i(TAG, "customAddMarker");
         MarkerOptions options = new MarkerOptions();
         options.position(latLng).title(title).snippet(snippet).draggable(true);
+
+        String idCat = place.getCategory().getId();
+
+        if(idCat.equals("1")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_blue));
+        }else if(idCat.equals("2")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_brown));
+        }else if(idCat.equals("3")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_green));
+        }else if(idCat.equals("4")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_purpple));
+        }else if(idCat.equals("5")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_red));
+        }else if(idCat.equals("6")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_dark_red));
+        }else if(idCat.equals("7")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_light_brown));
+        }
+
         /*if(me.equals("me")){
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.account));
         }*/
 
         Marker marker = mMap.addMarker(options);
+        mMapPlace.put(marker,place);
         marker.showInfoWindow();
+
         /*if(mMode.equals("one")){
             mMarker.showInfoWindow();
         }if(me.equals("me")){
@@ -367,6 +445,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     @Override
     public void deliveryError(VolleyError error, String flag) {
         hideDialog();
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Log.w(TAG,"abrir tela do local");
+        Place place = mMapPlace.get(marker);
+        Intent intent = new Intent(getActivity(), PlaceActivity.class);
+        intent.putExtra("place", place);
+        getActivity().startActivity(intent);
     }
 
 
@@ -427,5 +515,23 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+    }
+
+    public void showLegend(){
+        final Dialog rankDialog;
+        Log.i(TAG,"map_info()");
+        String TAG = "set-rat";
+        rankDialog = new Dialog(this, R.style.FullHeightDialog);
+        rankDialog.setContentView(R.layout.dialog_map_info);
+        rankDialog.setCancelable(true);
+
+        Button close = (Button) rankDialog.findViewById(R.id.bt_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rankDialog.dismiss();
+            }
+        });
+        rankDialog.show();
     }
 }

@@ -56,7 +56,7 @@ public class AdjustActivity extends BaseActivity {
         defaulRadius.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSeekbar.setProgress(50);
+                mSeekbar.setProgress(getDefaultRadius());
             }
         });
     }

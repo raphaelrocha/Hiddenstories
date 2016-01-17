@@ -39,8 +39,9 @@ public class PlaceListActivity extends BaseActivity {
 
         mCategory = getIntent().getParcelableExtra("category");
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("Locais");//texto temporário com o nome do local
+        mToolbar = setUpToolbar("Locais",true,false);
+        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*mToolbar.setTitle("Locais");//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -53,7 +54,8 @@ public class PlaceListActivity extends BaseActivity {
                 onBackPressed();
                 finish();
             }
-        });
+        });*/
+
 
         // FRAGMENT
         mFrag = (PlaceListFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");

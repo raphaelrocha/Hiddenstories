@@ -58,7 +58,7 @@ public class BaseActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private final String TAG = BaseActivity.this.getClass().getSimpleName();
-    private int DEFALT_RADIUS = 10;
+    private int DEFALT_RADIUS = 50;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -336,7 +336,8 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
             //MUDA COR DO TITULO DO TOOLBAR
-            toolbar.setTitleTextColor(0xFFFFFFFF);
+            //toolbar.setTitleTextColor(0xFFFFFFFF);
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
             /*if(transparent == true) {
                 toolbar.getBackground().setAlpha(0);
@@ -350,6 +351,7 @@ public class BaseActivity extends AppCompatActivity {
         dialog.setCancelable(cancelable);
         if (!dialog.isShowing()){
             dialog.setMessage(msg);
+
             dialog.setOnKeyListener(new Dialog.OnKeyListener() {
                 @Override
                 public boolean onKey(DialogInterface arg0, int keyCode,
@@ -482,6 +484,10 @@ public class BaseActivity extends AppCompatActivity {
             radius = DEFALT_RADIUS;
         }
         return radius;
+    }
+
+    public int getDefaultRadius(){
+        return this.DEFALT_RADIUS;
     }
 
     public User getUserLoggedObj(){

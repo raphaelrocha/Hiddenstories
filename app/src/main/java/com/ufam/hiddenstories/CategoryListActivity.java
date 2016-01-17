@@ -71,8 +71,9 @@ public class CategoryListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         setContentView(R.layout.activity_category_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Categorias");
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.setTitle("Categorias");
+        Toolbar toolbar = setUpToolbar("Categorias",false,false);
         setSupportActionBar(toolbar);
 
         mFrag = (CategoryListFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");

@@ -26,7 +26,8 @@ public class CommentaryListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentary_list);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = setUpToolbar("Comentários",true,false);
+        /*mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("Comentários");//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -40,7 +41,7 @@ public class CommentaryListActivity extends BaseActivity {
                 onBackPressed();
                 finish();
             }
-        });
+        });*/
 
         mPlace = getIntent().getParcelableExtra("place");
 

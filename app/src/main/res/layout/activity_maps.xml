@@ -28,6 +28,16 @@
         android:layout_height="match_parent"
         tools:context="com.ufam.hiddenstories.MapsActivity" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_eye"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_eye"
+        android:layout_below="@+id/app_bar_maps"
+        android:layout_alignRight="@+id/app_bar_maps"
+        android:layout_alignEnd="@+id/app_bar_maps" />
+
 </RelativeLayout>
 
 
