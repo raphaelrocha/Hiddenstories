@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
 
     private final String TAG = MainActivity.this.getClass().getSimpleName();
     private CallbackManager callbackManager;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +52,17 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         Button btLogin = (Button) findViewById(R.id.btn_login);
-        Button btNewUser = (Button) findViewById(R.id.btn_new_user);
+        //Button btNewUser = (Button) findViewById(R.id.btn_new_user);
 
         final EditText edtLoginUser = (EditText) findViewById(R.id.edt_login_user);
         final EditText edtLoginPasswd = (EditText) findViewById(R.id.edt_login_passwd);
 
-        edtLoginUser.setText("p1@h.com");
-        edtLoginPasswd.setText("123");
+        //edtLoginUser.setText("p1@h.com");
+        //edtLoginPasswd.setText("123");
 
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +73,17 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
             }
         });
 
-        btNewUser.setOnClickListener(new View.OnClickListener() {
+        /*btNewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                newUser();
+            }
+        });*/
+
+        mFab = (FloatingActionButton) findViewById(R.id.fab_account);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 newUser();
             }
         });
@@ -127,6 +136,8 @@ public class MainActivity extends BaseActivity implements CustomVolleyCallbackIn
                         Log.i("FACEBOOK", "LOGIN ERROR: "+exception);
                     }
                 });
+
+        hideKeyboard();
     }
 
     private void login(String user, String passwd){

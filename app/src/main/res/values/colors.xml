@@ -10,8 +10,10 @@
 
     <color name="grey">#ddd</color>
     <color name="black">#000</color>
+    <color name="text_hint">#cfccc7</color>
 
     <color name="blue">#ff0000ff</color>
+    <color name="bg_view">#25000000</color>
     <color name="bg_edt_txt">#25000000</color>
     <color name="transparent">#00B6B6B6</color>
     <color name="opacity1">#60000000</color>

@@ -4,72 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ufam.hiddenstories.FormUserActivity"
+    android:background="@color/bg_view"
     tools:showIn="@layout/activity_form_user">
 
-    <EditText
-        android:textColor="@color/colorPrimarytext"
-        android:layout_marginTop="20dp"
-        android:id="@+id/edt_user_name"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Seu nome"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:textColor="@color/colorPrimarytext"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/edt_user_name"
-        android:id="@+id/edt_login_user"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Seu e-mail"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:textColor="@color/colorPrimarytext"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/edt_login_user"
-        android:id="@+id/edt_login_passwd"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Sua senha"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        />
+            <EditText
+                android:background="@color/bg_edt_txt"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/white"
+                android:minHeight="40dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/edt_user_name"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Seu nome"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
 
-    <EditText
-        android:textColor="@color/colorPrimarytext"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/edt_login_passwd"
-        android:id="@+id/edt_login_passwd_2"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Repita Sua senha"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        />
+            <EditText
+                android:background="@color/bg_edt_txt"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/white"
+                android:minHeight="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/edt_user_name"
+                android:id="@+id/edt_login_user"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Seu e-mail"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
 
-    <Button
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/edt_login_passwd_2"
-        android:id="@+id/btn_save"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="Salvar"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        />
+            <EditText
+                android:background="@color/bg_edt_txt"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/white"
+                android:minHeight="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/edt_login_user"
+                android:id="@+id/edt_login_passwd"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Sua senha"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
+
+            <EditText
+                android:background="@color/bg_edt_txt"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/white"
+                android:minHeight="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/edt_login_passwd"
+                android:id="@+id/edt_login_passwd_2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Repita Sua senha"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/edt_login_passwd_2"
+                android:id="@+id/btn_save"
+                android:layout_width="249dp"
+                android:layout_height="45dp"
+                android:text="Salvar"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
 
 </RelativeLayout>

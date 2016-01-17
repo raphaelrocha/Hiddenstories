@@ -62,6 +62,8 @@ public class FormUserActivity extends BaseActivity implements CustomVolleyCallba
                 save();
             }
         });
+
+        hideKeyboard();
     }
 
     private void save(){
