@@ -14,7 +14,7 @@
         android:layout_height="250dp"
         android:id="@+id/new_place_ic"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_picture"
+        android:src="@drawable/cam_ico"
         android:background="@color/white"
         android:scaleType="centerCrop"
         />

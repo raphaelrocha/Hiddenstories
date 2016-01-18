@@ -75,7 +75,8 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
 
         mCategory = getIntent().getParcelableExtra("category");
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = setUpToolbar("Novo Local", true, false);
+        /*mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("Novo Local");//texto temporário com o nome do local
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,7 +90,7 @@ public class FormPlaceActivity extends BaseActivity implements CustomVolleyCallb
                 onBackPressed();
                 finish();
             }
-        });
+        });*/
 
         mIvLocal = (ImageView) findViewById(R.id.new_place_ic);
         mNameLocal = (EditText) findViewById(R.id.new_place_name);
