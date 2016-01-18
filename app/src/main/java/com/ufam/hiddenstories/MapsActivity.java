@@ -103,8 +103,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         });
 
         mFab.setVisibility(View.INVISIBLE);
-
-
     }
 
     private void callServer(){
@@ -132,7 +130,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         params.put("radius",radius);
 
         mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.GET_ALL_PLACE, Request.Method.POST, false,  params, "GET_ALL_PLACE");
-        //mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.actionGetAllPro, Request.Method.POST, false,  params, "ACTION_GET_LIST_PRO_BY_PROXIMITY");
     }
 
 
@@ -149,8 +146,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-
-
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
