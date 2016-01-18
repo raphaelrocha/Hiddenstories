@@ -206,7 +206,7 @@ public class CategoryListActivity extends BaseActivity {
                     public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
                         //Toast.makeText(CategoryActivity.this, "onProfileChanged: ", Toast.LENGTH_SHORT).show();
                         //headerNavigationLeft.setBackgroundRes(R.drawable.camaro);
-                        //goToProfileUser();
+                        goToProfileUser();
                         return false;
                     }
                 })

@@ -61,6 +61,7 @@
                 android:background="@color/bg_edt_txt"
                 android:textColorHint="@color/text_hint"
                 android:textColor="@color/white"
+                android:password="true"
                 />
 
             <Button

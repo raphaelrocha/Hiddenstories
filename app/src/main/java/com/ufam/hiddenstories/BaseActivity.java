@@ -260,6 +260,7 @@ public class BaseActivity extends AppCompatActivity {
             user.setId(jo.getString("id"));
             user.setEmail(jo.getString("email"));
             user.setName(jo.getString("name"));
+            user.setPasswd(jo.getString("passwd"));
             if(jo.getString("picture_profile").contains("graph.facebook.com")){
                 user.setPictureProfile(jo.getString("picture_profile"));
             }else{
@@ -345,6 +346,11 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         return toolbar;
+    }
+
+    public void goToProfileUser(){
+        Intent intent  = new Intent(this, ProfileManagerActivity.class);
+        startActivity(intent);
     }
 
     public void showDialog(String msg, boolean cancelable) {

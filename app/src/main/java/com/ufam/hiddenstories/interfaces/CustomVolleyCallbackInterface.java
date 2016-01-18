@@ -16,7 +16,7 @@ public interface CustomVolleyCallbackInterface {
          @Override
          public void onStop(){
             super.onStop();
-            mVolleyConnection.canceRequest();
+            mVolleyConnection.cancelRequest();
          }
     * ONDE mVolleyConnection É UMA INSTÂNCIA DA CLASSE VolleyConnection
     */

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,10 +42,14 @@ public class FormUserActivity extends BaseActivity implements CustomVolleyCallba
         mVolleyConnection = new VolleyConnection(this);
 
         Button btnSave = (Button) findViewById(R.id.btn_save);
-        edtName = (EditText) findViewById(R.id.edt_user_name);
+
         edtLogin = (EditText) findViewById(R.id.edt_login_user);
         edtPasswd = (EditText) findViewById(R.id.edt_login_passwd);
         edtPasswd2 = (EditText) findViewById(R.id.edt_login_passwd_2);
+
+        edtName = (EditText) findViewById(R.id.edt_user_name);
+        edtName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        edtName.requestFocus();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,45 +73,45 @@ public class FormUserActivity extends BaseActivity implements CustomVolleyCallba
         if(name.equals("")){
             valid = false;
             if(msg.equals("")){
-                msg = msg+"\"Informe seu nome.";
+                msg = msg+"Informe seu nome.";
             }else{
-                msg = msg+"\n\"Informe seu nome.";
+                msg = msg+"\nInforme seu nome.";
             }
         }
 
         if(email.equals("")){
             valid = false;
             if(msg.equals("")){
-                msg = msg+"\"Informe seu e-mail.";
+                msg = msg+"Informe seu e-mail.";
             }else{
-                msg = msg+"\n\"Informe seu e-mail.";
+                msg = msg+"\nInforme seu e-mail.";
             }
         }
 
         if(passwd.equals("")){
             valid = false;
             if(msg.equals("")){
-                msg = msg+"\"Informe sua senha.";
+                msg = msg+"Informe sua senha.";
             }else{
-                msg = msg+"\n\"Informe sua senha.";
+                msg = msg+"\nInforme sua senha.";
             }
         }
 
         if(passwd2.equals("")){
             valid = false;
             if(msg.equals("")){
-                msg = msg+"\"Repita sua senha.";
+                msg = msg+"Repita sua senha.";
             }else{
-                msg = msg+"\n\"Repita sua senha.";
+                msg = msg+"\nRepita sua senha.";
             }
         }
 
         if(!passwd.equals(passwd2)){
             valid = false;
             if(msg.equals("")){
-                msg = msg+"\"As senhas devem ser iguais.";
+                msg = msg+"As senhas devem ser iguais.";
             }else{
-                msg = msg+"\n\"As senhas devem ser iguais.";
+                msg = msg+"\nAs senhas devem ser iguais.";
             }
         }
 
