@@ -22,10 +22,10 @@
             android:layout_alignParentTop="true"
             fresco:actualImageScaleType="centerCrop"
             fresco:fadeDuration="300"
-            fresco:failureImage="@drawable/error_img"
-            fresco:placeholderImage="@color/black"
-            fresco:retryImage="@drawable/retry_img"
-            android:background="@color/black"/>
+            fresco:failureImage="@drawable/n_perfil"
+            fresco:placeholderImage="@drawable/n_perfil"
+            fresco:retryImage="@drawable/n_perfil"
+            android:background="@drawable/n_perfil"/>
 
         <TextView
             android:layout_width="wrap_content"
