@@ -112,7 +112,7 @@ public class AlbumActivity extends BaseActivity implements RecyclerViewOnClickLi
         params.put("text",mTEXT);
         params.put("file_string",mIMAGE_TO_SAVE);
         params.put("ext",ServerInfo.EXTENSION_IMAGE_FILE);
-        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SEND_PICTURE, Request.Method.POST,false, params,"SEND_PICTURE");
+        mVolleyConnection.callServerApiByJsonObjectRequest(ServerInfo.SEND_PICTURE, Request.Method.POST,true, params,"SEND_PICTURE");
     }
 
     public void setList(ArrayList<Picture> p){

@@ -139,7 +139,7 @@
                 android:id="@+id/btn_deleteUser"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="DELETAR CONTA"
+                android:text="EXCLUIR CONTA"
                 android:background="@color/md_red_700"
                 android:textColor="@color/white"
                 android:layout_centerHorizontal="true"
