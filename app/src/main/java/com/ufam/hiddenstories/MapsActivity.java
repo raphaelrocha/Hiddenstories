@@ -211,6 +211,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_dark_red));
         }else if(idCat.equals("7")){
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_light_brown));
+        }else if(idCat.equals("8")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_gold));
         }
 
 
@@ -407,6 +409,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_dark_red));
         }else if(idCat.equals("7")){
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_light_brown));
+        }else if(idCat.equals("8")){
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_gold));
         }
 
         /*if(me.equals("me")){

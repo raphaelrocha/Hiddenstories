@@ -102,6 +102,7 @@ A sala de espetáculos do teatro tem capacidade para 701 pessoas, distribuídas 
     <string name="cat_name_5">Fábricas</string>
     <string name="cat_name_6">Igrejas</string>
     <string name="cat_name_7">Portos</string>
+    <string name="cat_name_8">Hotéis</string>
     <string name="bt_cloese_map_info">Fechar</string>
     <string name="label_info">Legenda</string>
     <string name="title_activity_profile_manager">ProfileManagerActivity</string>
